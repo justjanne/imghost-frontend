@@ -80,7 +80,7 @@ func returnResult(writer http.ResponseWriter, result Result) error {
 	writer.Write([]byte("</pre>"))
 	if result.Success {
 		writer.Write([]byte("<p><a href=\""))
-		writer.Write([]byte(fmt.Sprintf("http://localhost:8080/i/%s", result.Id)))
+		writer.Write([]byte(fmt.Sprintf("https://i.k8r.eu/i/%s", result.Id)))
 		writer.Write([]byte("\">Uploaded Image</a></p>"))
 	}
 	return nil
@@ -94,6 +94,7 @@ func main() {
 	config.SourceFolder = os.Getenv("IK8R_SOURCE_FOLDER")
 	config.TargetFolder = os.Getenv("IK8R_TARGET_FOLDER")
 	config.Redis.Address = os.Getenv("IK8R_REDIS_ADDRESS")
+	config.Redis.Password = os.Getenv("IK8R_REDIS_PASSWORD")
 	config.ImageQueue = os.Getenv("IK8R_REDIS_IMAGE_QUEUE")
 	config.ResultChannel = os.Getenv("IK8R_REDIS_RESULT_CHANNEL")
 
