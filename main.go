@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"encoding/base64"
 	"crypto/rand"
+	"time"
 )
 
 func writeBody(reader io.ReadCloser, path string) error {
@@ -116,6 +117,8 @@ func main() {
 			return
 		}
 
+		fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
+
 		data, err := json.Marshal(image)
 		if err != nil {
 			returnResult(w, Result{
@@ -128,6 +131,8 @@ func main() {
 
 		pubsub := client.Subscribe(config.ResultChannel)
 		client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
+
+		fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
 
 		waiting := true
 		for waiting {
@@ -151,6 +156,8 @@ func main() {
 				})
 				return
 			}
+
+			fmt.Printf("Returned task %s at %d\n", result.Id, time.Now().Unix())
 
 			if result.Id == image.Id {
 				waiting = false
