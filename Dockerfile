@@ -1,9 +1,11 @@
-FROM instrumentisto/glide:0.13.1-go1.10 as builder
-RUN apk --update add gcc musl-dev
+FROM golang as builder
+
+RUN curl https://glide.sh/get | sh
+
 WORKDIR /go/src/app
 COPY . .
 RUN glide install
-RUN go build -a app .
+RUN CGO_ENABLED=false go build -a app .
 
 FROM alpine:3.7
 WORKDIR /root/
