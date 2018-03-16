@@ -87,56 +87,48 @@ func returnResult(writer http.ResponseWriter, result Result) error {
 	return nil
 }
 
-func main() {
-	config := Config{}
+func printHeaders(r *http.Request) {
+	fmt.Println(r.URL)
+	for key, value := range r.Header {
+		fmt.Printf("  %s: %s\n", key, value)
+	}
+}
 
-	json.Unmarshal([]byte(os.Getenv("IK8R_SIZES")), &config.Sizes)
-	json.Unmarshal([]byte(os.Getenv("IK8R_QUALITY")), &config.Quality)
-	config.SourceFolder = os.Getenv("IK8R_SOURCE_FOLDER")
-	config.TargetFolder = os.Getenv("IK8R_TARGET_FOLDER")
-	config.Redis.Address = os.Getenv("IK8R_REDIS_ADDRESS")
-	config.Redis.Password = os.Getenv("IK8R_REDIS_PASSWORD")
-	config.ImageQueue = os.Getenv("IK8R_REDIS_IMAGE_QUEUE")
-	config.ResultChannel = os.Getenv("IK8R_REDIS_RESULT_CHANNEL")
+func main() {
+	config := NewConfigFromEnv()
 
 	client := redis.NewClient(&redis.Options{
 		Addr:     config.Redis.Address,
 		Password: config.Redis.Password,
 	})
 
-	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
-		r.ParseMultipartForm(32 << 20)
-		file, _, err := r.FormFile("file")
-		image, err := createImage(&config, file)
-		if err != nil {
-			returnResult(w, Result{
-				Id:      "",
-				Success: false,
-				Errors:  []string{err.Error()},
-			})
-			return
-		}
+	//db, err := sql.Open(config.Database.Format, config.Database.Url)
+	//if err != nil {
+	//panic(err)
+	//}
 
-		fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
+	staticServer := http.FileServer(http.Dir("static/"))
+	imageServer := http.FileServer(http.Dir(config.TargetFolder))
 
-		data, err := json.Marshal(image)
-		if err != nil {
-			returnResult(w, Result{
-				Id:      image.Id,
-				Success: false,
-				Errors:  []string{err.Error()},
-			})
-			return
-		}
+	http.HandleFunc("/upload/", func(w http.ResponseWriter, r *http.Request) {
+		printHeaders(r)
 
-		pubsub := client.Subscribe(config.ResultChannel)
-		client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
+		if r.Method == "POST" {
+			r.ParseMultipartForm(32 << 20)
+			file, _, err := r.FormFile("file")
+			image, err := createImage(&config, file)
+			if err != nil {
+				returnResult(w, Result{
+					Id:      "",
+					Success: false,
+					Errors:  []string{err.Error()},
+				})
+				return
+			}
 
-		fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+			fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
 
-		waiting := true
-		for waiting {
-			message, err := pubsub.ReceiveMessage()
+			data, err := json.Marshal(image)
 			if err != nil {
 				returnResult(w, Result{
 					Id:      image.Id,
@@ -146,33 +138,53 @@ func main() {
 				return
 			}
 
-			result := Result{}
-			err = json.Unmarshal([]byte(message.Payload), &result)
-			if err != nil {
-				returnResult(w, Result{
-					Id:      image.Id,
-					Success: false,
-					Errors:  []string{err.Error()},
-				})
-				return
+			pubsub := client.Subscribe(config.ResultChannel)
+			client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
+
+			fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+
+			waiting := true
+			for waiting {
+				message, err := pubsub.ReceiveMessage()
+				if err != nil {
+					returnResult(w, Result{
+						Id:      image.Id,
+						Success: false,
+						Errors:  []string{err.Error()},
+					})
+					return
+				}
+
+				result := Result{}
+				err = json.Unmarshal([]byte(message.Payload), &result)
+				if err != nil {
+					returnResult(w, Result{
+						Id:      image.Id,
+						Success: false,
+						Errors:  []string{err.Error()},
+					})
+					return
+				}
+
+				fmt.Printf("Returned task %s at %d\n", result.Id, time.Now().Unix())
+
+				if result.Id == image.Id {
+					waiting = false
+
+					returnResult(w, result)
+					return
+				}
 			}
-
-			fmt.Printf("Returned task %s at %d\n", result.Id, time.Now().Unix())
-
-			if result.Id == image.Id {
-				waiting = false
-
-				returnResult(w, result)
-				return
-			}
+		} else {
+			staticServer.ServeHTTP(w, r)
 		}
 	})
 
-	fs := http.FileServer(http.Dir("static/"))
-	http.Handle("/", fs)
-
-	imageServer := http.FileServer(http.Dir(config.TargetFolder))
 	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		printHeaders(r)
+		staticServer.ServeHTTP(w, r)
+	})
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

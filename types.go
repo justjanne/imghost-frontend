@@ -1,5 +1,10 @@
 package main
 
+import (
+	"os"
+	"encoding/json"
+)
+
 type Image struct {
 	Id       string `json:"id"`
 	MimeType string `json:"mime_type"`
@@ -37,12 +42,35 @@ type RedisConfig struct {
 	Password string
 }
 
+type DatabaseConfig struct {
+	Format string
+	Url    string
+}
+
 type Config struct {
 	Sizes         []SizeDefinition
 	Quality       Quality
 	SourceFolder  string
 	TargetFolder  string
 	Redis         RedisConfig
+	Database      DatabaseConfig
 	ImageQueue    string
 	ResultChannel string
+}
+
+func NewConfigFromEnv() Config {
+	config := Config{}
+
+	json.Unmarshal([]byte(os.Getenv("IK8R_SIZES")), &config.Sizes)
+	json.Unmarshal([]byte(os.Getenv("IK8R_QUALITY")), &config.Quality)
+	config.SourceFolder = os.Getenv("IK8R_SOURCE_FOLDER")
+	config.TargetFolder = os.Getenv("IK8R_TARGET_FOLDER")
+	config.Redis.Address = os.Getenv("IK8R_REDIS_ADDRESS")
+	config.Redis.Password = os.Getenv("IK8R_REDIS_PASSWORD")
+	config.ImageQueue = os.Getenv("IK8R_REDIS_IMAGE_QUEUE")
+	config.ResultChannel = os.Getenv("IK8R_REDIS_RESULT_CHANNEL")
+	config.Database.Format = os.Getenv("IK8R_DATABASE_TYPE")
+	config.Database.Url = os.Getenv("IK8R_DATABASE_URL")
+
+	return config
 }

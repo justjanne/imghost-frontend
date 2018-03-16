@@ -2,3 +2,4 @@ package: github.com/justjanne/imghost-frontend
 import:
 - package: github.com/go-redis/redis
   version: ^6.10.2
+- package: github.com/lib/pq

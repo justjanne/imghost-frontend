@@ -1,5 +1,5 @@
-hash: 55e100566d38affe5f77251e4ea0b07d3ebcca1480b2931c9cdc0e606398f5f3
-updated: 2018-03-16T16:44:29.59466378+01:00
+hash: a4dc37eb677d9e7f409018b840b435b3dfbd02ad229d24f42ac942d2a07116b5
+updated: 2018-03-16T23:16:25.752919561+01:00
 imports:
 - name: github.com/go-redis/redis
   version: 877867d2845fbaf86798befe410b6ceb6f5c29a3
@@ -11,9 +11,8 @@ imports:
   - internal/proto
   - internal/singleflight
   - internal/util
-- name: gopkg.in/gographics/imagick.v2
-  version: 589a8ef16fd4f08a29ad26afe5c33fb5673e4efc
+- name: github.com/lib/pq
+  version: 88edab0803230a3898347e77b474f8c1820a1f20
   subpackages:
-  - imagick
-  - imagick/types
+  - oid
 testImports: []
