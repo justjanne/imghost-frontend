@@ -2,10 +2,16 @@
   margin: 0
   padding: 0
 
+html
+  height: 100%
+
 body
   background: #F2F2F2
   font-family: 'Lato', sans-serif
   font-size: 81.25%
+  height: 100%
+  display: flex
+  flex-direction: column
 
 nav
   position: sticky
@@ -13,39 +19,46 @@ nav
   background: #607D8B
   box-shadow: 0 2px 4px rgba(33, 33, 33, 0.4)
 
-nav ul
-  display: flex
-  max-width: 1024px
-  margin: 0 auto
-  height: 56px
+  ul
+    display: flex
+    max-width: 1024px
+    margin: 0 auto
+    height: 56px
+    align-items: center
+    li, li > *
+      color: #282828
+      text-decoration: none
+    li
+      display: block
+      line-height: 24px
+      &.title, &.title > *
+        font-size: 24px
+        color: #FFC107
+        font-weight: 700
+      &.spacer
+        flex-grow: 1
+      &:not(.spacer)
+        margin: 0 8px
+        &:first-child
+          margin-left: 0
+        &:last-child
+          margin-right: 0
+        &:not(.title) a
+          display: block
+          background: #FFC107
+          padding: 4px 16px
+          border-radius: 2px
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+          &:hover
+            background: #FFD54F
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+
+.container.centered
+  flex-grow: 1
   align-items: center
-  li, li > *
-    color: #282828
-    text-decoration: none
-  li
-    display: block
-    line-height: 24px
-    &.title, &.title > *
-      font-size: 24px
-      color: #FFC107
-      font-weight: 700
-    &.spacer
-      flex-grow: 1
-    &:not(.spacer)
-      margin: 0 8px
-      &:first-child
-        margin-left: 0
-      &:last-child
-        margin-right: 0
-      &:not(.title) a
-        display: block
-        background: #FFC107
-        padding: 4px 16px
-        border-radius: 2px
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
-        &:hover
-          background: #FFD54F
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+  justify-content: center
+  display: flex
+  margin-bottom: 64px
 
 .images
   display: flex
