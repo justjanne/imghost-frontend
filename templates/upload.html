@@ -1,19 +1,19 @@
 {{define "title"}}Upload | ik8r{{end}}
 {{define "content"}}
-{{ range .Results }}
-{{ if .Success }}
+{{range .Results}}
+{{if .Success}}
 <div class="info success">
-    <h2>Upload of {{ .Id }} finished. <a href="/i/{{ .Id }}">View</a>.</h2>
+    <h2>Upload of {{.Id}} finished. <a href="/i/{{.Id}}">View</a>.</h2>
 </div>
-{{ else }}
+{{else}}
 <div class="info error">
-    <h2>Upload of {{ .Id }} failed.</h2>
-{{ range .Errors }}
-    <pre>{{ . }}</pre>
-{{ end }}
+    <h2>Upload of {{.Id}} failed.</h2>
+{{range .Errors}}
+    <pre>{{.}}</pre>
+{{end}}
 </div>
-{{ end }}
-{{ end }}
+{{end}}
+{{end}}
 
 <form action="/upload/" method="POST" enctype="multipart/form-data">
     <input type="file" name="file" accept="image/jpeg,image/png,image/bmp,*.jpeg,*.jpg,*.png,*.bmp" multiple/>

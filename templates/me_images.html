@@ -1,17 +1,17 @@
 {{define "title"}}My Images | ik8r{{end}}
 {{define "content"}}
 <div class="images">
-{{ range .Images }}
-    <a class="image" href="/i/{{ .Id }}">
+{{range .Images}}
+    <a class="image" href="/i/{{.Id}}">
         <div class="image-container">
-            <img src="/i/{{ .Id }}t" >
+            <img src="/i/{{.Id}}t" >
         </div>
         <div class="info">
-            <p>{{ .OriginalName }}</p>
-            <p><time>{{ .CreatedAt.Format "2006-01-02 15:04" }}</time></p>
-            <p>{{ .MimeType }}</p>
+            <p>{{.OriginalName}}</p>
+            <p><time>{{.CreatedAt.Format "2006-01-02 15:04"}}</time></p>
+            <p>{{.MimeType}}</p>
         </div>
     </a>
-{{ end }}
+{{end}}
 </div>
 {{end}}
