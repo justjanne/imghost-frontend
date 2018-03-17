@@ -1,4 +1,4 @@
-* 
+*
   margin: 0
   padding: 0
 
@@ -8,9 +8,39 @@ body
   font-size: 81.25%
 
 nav
+  background: #607D8B
+
+nav ul
   display: flex
-  .spacer
-    flex-grow: 1
+  max-width: 1024px
+  margin: 0 auto
+  height: 56px
+  align-items: center
+  li
+    display: block
+    line-height: 24px
+    &.title
+      font-size: 24px
+      color: #FFC107
+      font-weight: 700
+    &:not(.spacer)
+      margin: 0 8px
+      &:first-child
+        margin-left: 0
+      &:last-child
+        margin-right: 0
+      &:not(.title):not(.me) a
+        display: block
+        background: #FFC107
+        padding: 4px 16px
+        border-radius: 2px
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+        &:hover
+          background: #FFD54F
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+  li, li > *
+    color: #282828
+    text-decoration: none
 
 .images
   display: flex
@@ -18,21 +48,18 @@ nav
   margin: 0 auto
   align-items: start
   flex-wrap: wrap
-
   .image
     padding: 8px
     margin: 8px
     position: relative
-    box-shadow: 0 2px 4px rgba(33,33,33,0.2)
+    box-shadow: 0 2px 4px rgba(33, 33, 33, 0.2)
     transition: all 200ms
     text-decoration: none
     width: 160px
     background: #ffffff
-
-    &:hover
+    &: hover
       margin-top: 4px
-      box-shadow: 0 4px 6px rgba(33,33,33,0.3)
-
+      box-shadow: 0 4px 6px rgba(33, 33, 33, 0.3)
     .image-container
       display: flex
       justify-content: center
@@ -42,7 +69,6 @@ nav
       flex-direction: column
       height: 160px
       width: 160px
-
     .info
       display: block
       z-index: 1
@@ -50,7 +76,6 @@ nav
       line-height: 1.25
       font-size: 10pt
       padding-top: 12px
-
       p
         white-space: nowrap
         text-overflow: ellipsis
