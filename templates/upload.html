@@ -8,7 +8,11 @@
     </div>
 {{else}}
     <div class="info error">
+        {{if .Id}}
         <h2>Upload of {{.Id}} failed.</h2>
+        {{else}}
+        <h2>Upload failed.</h2>
+        {{end}}
     {{range .Errors}}
         <pre>{{.}}</pre>
     {{end}}
