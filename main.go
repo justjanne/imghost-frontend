@@ -126,12 +126,10 @@ func main() {
 				return
 			}
 
-			result, err := db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user)
+			_, err = db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user)
 			if err != nil {
 				panic(err)
 			}
-
-			println(result)
 
 			fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
 
