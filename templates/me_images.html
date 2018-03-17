@@ -18,9 +18,9 @@
               <img src="/i/{{ .Id }}t" >
             </div>
             <div class="info">
-              <span>{{ .OriginalName }}</span>
-              <span>{{ .CreatedAt }}</span>
-              <span>{{ .MimeType }}</span>
+              <p>{{ .OriginalName }}</p>
+              <p><time>{{ .CreatedAt.Format "2012-11-01 22:08" }}</time></p>
+              <p>{{ .MimeType }}</p>
             </div>
         </a>
     {{ end }}
