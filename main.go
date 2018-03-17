@@ -187,7 +187,7 @@ func main() {
 					panic(err)
 				}
 
-				data, err := json.Marshal(images)
+				data, err := json.Marshal(image)
 				if err != nil {
 					if err = returnResult(w, "upload.html", UploadData{
 						user,
