@@ -354,81 +354,9 @@ func main() {
 	http.HandleFunc("/me/images/", func(w http.ResponseWriter, r *http.Request) {
 		user := parseUser(r)
 
-		type ImageDetailData struct {
-			User  UserInfo
-			Image Image
-		}
-
 		type ImageListData struct {
 			User   UserInfo
 			Images []Image
-		}
-
-		dir, imageId := path.Split(r.URL.Path)
-		if dir == "/me/images/" {
-			result, err := db.Query(`
-			SELECT
-				id,
-				coalesce(title,  ''),
-				coalesce(description, ''),
-        		coalesce(created_at, to_timestamp(0)),
-				coalesce(original_name, ''),
-				coalesce(type, '')
-			FROM images
-			WHERE owner = $1
-			AND id = $2
-			`, user.Id, imageId)
-			if err != nil {
-				panic(err)
-			}
-
-			var info Image
-			if result.Next() {
-				err := result.Scan(&info.Id, &info.Title, &info.Description, &info.CreatedAt, &info.OriginalName, &info.MimeType)
-				if err != nil {
-					panic(err)
-				}
-
-				switch r.Method {
-				case "GET":
-					if err = returnResult(w, "me_images_info.html", ImageDetailData{
-						user,
-						info,
-					}); err != nil {
-						panic(err)
-					}
-					return
-				case "POST":
-					_, err = db.Exec(
-						"UPDATE images SET title = $1, description = $2 WHERE id = $3 AND owner = $4",
-						r.PostFormValue("title"),
-						r.PostFormValue("description"),
-						info.Id,
-						user.Id,
-					)
-					if err != nil {
-						panic(err)
-					}
-					return
-				case "DELETE":
-					_, err = db.Exec("DELETE FROM images WHERE id = $1 AND owner = $2", info.Id, user.Id)
-					if err != nil {
-						panic(err)
-					}
-					for _, definition := range config.Sizes {
-						os.Remove(path.Join(config.TargetFolder, fmt.Sprintf("%s%s", info.Id, definition.Suffix)))
-					}
-					return
-				}
-			}
-
-			if err = returnResult(w, "me_images_info.html", ImageDetailData{
-				user,
-				Image{},
-			}); err != nil {
-				panic(err)
-			}
-			return
 		}
 
 		result, err := db.Query(`
