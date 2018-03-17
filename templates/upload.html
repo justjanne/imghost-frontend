@@ -3,11 +3,11 @@
 <div class="container centered">
 {{range .Results}}
 {{if .Success}}
-    <div class="info success">
+    <div class="alert success">
         <h2>Upload of {{.Id}} finished. <a href="/{{.Id}}">View</a>.</h2>
     </div>
 {{else}}
-    <div class="info error">
+    <div class="alert error">
         {{if .Id}}
         <h2>Upload of {{.Id}} failed.</h2>
         {{else}}
