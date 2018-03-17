@@ -91,8 +91,8 @@ func parseUser(r *http.Request) UserInfo {
 }
 
 type UploadData struct {
-	User   UserInfo
-	Result Result
+	User    UserInfo
+	Results []Result
 }
 
 func returnResult(w http.ResponseWriter, templateName string, data interface{}) error {
@@ -129,59 +129,95 @@ func main() {
 		if r.Method == "POST" {
 			user := parseUser(r)
 
-			r.ParseMultipartForm(32 << 20)
-			file, header, err := r.FormFile("file")
-			image, err := createImage(&config, file, header)
-			if err != nil {
-				returnResult(w, "upload.html", UploadData{
-					user,
-					Result{
-						Id:      "",
-						Success: false,
-						Errors:  []string{err.Error()},
-					},
-				})
-				return
-			}
-
-			_, err = db.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
-
-			data, err := json.Marshal(image)
+			err := r.ParseMultipartForm(32 << 20)
 			if err != nil {
 				if err = returnResult(w, "upload.html", UploadData{
 					user,
-					Result{
-						Id:      image.Id,
+					[]Result{{
 						Success: false,
 						Errors:  []string{err.Error()},
-					},
+					}},
 				}); err != nil {
 					panic(err)
 				}
-				return
+			}
+
+			var images []Image
+			var ids []string
+
+			m := r.MultipartForm
+			files := m.File["file"]
+			for _, header := range files {
+				file, err := header.Open()
+				if err != nil {
+					if err = returnResult(w, "upload.html", UploadData{
+						user,
+						[]Result{{
+							Success: false,
+							Errors:  []string{err.Error()},
+						}},
+					}); err != nil {
+						panic(err)
+					}
+					return
+				}
+				image, err := createImage(&config, file, header)
+				if err != nil {
+					if err = returnResult(w, "upload.html", UploadData{
+						user,
+						[]Result{{
+							Success: false,
+							Errors:  []string{err.Error()},
+						}},
+					}); err != nil {
+						panic(err)
+					}
+					return
+				}
+
+				images = append(images, image)
+				ids = append(ids, image.Id)
 			}
 
 			pubsub := client.Subscribe(config.ResultChannel)
-			client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
 
-			fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+			for _, image := range images {
+				_, err = db.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
+				if err != nil {
+					panic(err)
+				}
 
-			waiting := true
-			for waiting {
+				data, err := json.Marshal(images)
+				if err != nil {
+					if err = returnResult(w, "upload.html", UploadData{
+						user,
+						[]Result{{
+							Success: false,
+							Errors:  []string{err.Error()},
+						}},
+					}); err != nil {
+						panic(err)
+					}
+					return
+				}
+
+				fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
+				client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
+				fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+			}
+
+			var results []Result
+
+			var waiting map[string]bool
+			for len(waiting) != 0 {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
 					if err = returnResult(w, "upload.html", UploadData{
 						user,
-						Result{
-							Id:      image.Id,
+						[]Result{{
 							Success: false,
 							Errors:  []string{err.Error()},
-						},
+						}},
 					}); err != nil {
 						panic(err)
 					}
@@ -193,11 +229,10 @@ func main() {
 				if err != nil {
 					if err = returnResult(w, "upload.html", UploadData{
 						user,
-						Result{
-							Id:      image.Id,
+						[]Result{{
 							Success: false,
 							Errors:  []string{err.Error()},
-						},
+						}},
 					}); err != nil {
 						panic(err)
 					}
@@ -206,23 +241,25 @@ func main() {
 
 				fmt.Printf("Returned task %s at %d\n", result.Id, time.Now().Unix())
 
-				if result.Id == image.Id {
-					waiting = false
+				if _, ok := waiting[result.Id]; ok {
+					delete(waiting, result.Id)
 
-					if err = returnResult(w, "upload.html", UploadData{
-						user,
-						result,
-					}); err != nil {
-						panic(err)
-					}
-					return
+					results = append(results, result)
 				}
 			}
+
+			if err = returnResult(w, "upload.html", UploadData{
+				user,
+				results,
+			}); err != nil {
+				panic(err)
+			}
+			return
 		} else {
 			user := parseUser(r)
 			if err = returnResult(w, "upload.html", UploadData{
 				user,
-				Result{},
+				[]Result{},
 			}); err != nil {
 				panic(err)
 			}
