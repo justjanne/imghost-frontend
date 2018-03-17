@@ -83,7 +83,7 @@ nav
 
 form.upload
   padding: 96px 0
-  box-shadow: 0 2px 4px rgba(33,33,33,0.2)
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2)
   text-decoration: none
   border-radius: 2px
   text-align: center
@@ -99,15 +99,15 @@ form.upload
     padding: 8px
     margin: 8px
     position: relative
-    box-shadow: 0 2px 4px rgba(33, 33, 33, 0.2)
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
     transition: all 200ms
     text-decoration: none
     width: 160px
-    background: #ffffff
+    background: #333333
     border-radius: 2px
     &:hover
       margin-top: 4px
-      box-shadow: 0 4px 6px rgba(33, 33, 33, 0.3)
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4)
     .image-container
       display: flex
       justify-content: center
@@ -143,11 +143,11 @@ form.upload
     font-size: 14pt
     font-weight: normal
     color: #eee
-  &:empty
-    display: none
-    &+.image
-      border-top-left-radius: 4px
-      border-top-right-radius: 4px
+    &:empty
+      display: none
+      &+.image
+        border-top-left-radius: 4px
+        border-top-right-radius: 4px
   .image
     background: #000
     display: flex
