@@ -1,4 +1,4 @@
-FROM golang:alpine as builder
+FROM golang:alpine as go_builder
 
 RUN apk add --no-cache curl git gcc musl-dev
 RUN curl https://glide.sh/get | sh
@@ -8,8 +8,16 @@ COPY . .
 RUN glide install
 RUN CGO_ENABLED=false go build -a app .
 
+FROM node:alpine as asset_builder
+WORKDIR /app
+COPY package* /app/
+COPY assets /app/assets
+RUN npm install
+RUN npm run build
+
 FROM alpine:3.7
 WORKDIR /
-COPY --from=builder /go/src/app/app /app
-COPY --from=builder /go/src/app/templates /templates
+COPY --from=go_builder /go/src/app/app /app
+COPY --from=go_builder /go/src/app/templates /templates
+COPY --from=asset_builder /app/assets /assets
 CMD ["/app"]

@@ -121,6 +121,7 @@ func main() {
 	}
 
 	imageServer := http.FileServer(http.Dir(config.TargetFolder))
+	assetServer := http.FileServer(http.Dir("assets"))
 
 	http.HandleFunc("/upload/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
@@ -220,7 +221,17 @@ func main() {
 			Images []Image
 		}
 
-		result, err := db.Query("SELECT id, title, description, created_at, original_name, type FROM images WHERE owner = $1", user.Id)
+		result, err := db.Query(`
+			SELECT
+				id,
+				coalesce(title,  ''),
+				coalesce(description, ''),
+        		coalesce(created_at, to_timestamp(0)),
+				coalesce(original_name, ''),
+				coalesce(type, '')
+			FROM images
+			WHERE owner = $1
+			`, user.Id)
 		if err != nil {
 			panic(err)
 		}
@@ -248,6 +259,7 @@ func main() {
 		}
 	})
 
+	http.Handle("/assets/", http.StripPrefix("/assets/", assetServer))
 	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		user := parseUser(r)

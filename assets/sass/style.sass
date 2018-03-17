@@ -1,0 +1,30 @@
+.images 
+  display: flex
+  max-width: 1024px
+  margin: 0 auto
+
+  .image
+    display: flex
+    height: 160px
+    width: 160px
+    justify-content: center
+    align-content: center
+    justify-items: center
+    align-items: center
+    padding: 4px
+    margin: 4px
+    position: relative
+    box-shadow: 0 2px 4px rgba(33, 33, 33, 0.2)
+    transition: all 200ms
+
+    .info
+      display: none
+      position: absolute
+      right: 0
+
+    &:hover
+      margin-top: 2px
+      box-shadow: 0 4px 6px rgba(33, 33, 33, 0.3)
+
+      .info
+        display: block
