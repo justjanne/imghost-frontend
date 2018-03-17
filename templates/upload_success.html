@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
+<title>Upload | ik8r</title>
+<link href="/assets/css/style.css" rel="stylesheet">
+<link href="/assets/css/fonts.css" rel="stylesheet">
 
 <p>Welcome, {{ .User.Name }}</p>
 <p>
@@ -6,6 +10,10 @@
     <a href="/me/albums">My Albums</a> |
     <a href="/upload">Upload</a>
 </p>
+
+<div class="info success">
+    <h2>Upload of {{ .Result.Id }} finished. <a href="/i/{{ .Result.Id }}">View</a>.</h2>
+</div>
 
 <form action="/upload/" method="POST" enctype="multipart/form-data">
     <input type="file" name="file"/>

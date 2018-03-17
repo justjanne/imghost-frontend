@@ -76,23 +76,6 @@ func createImage(config *Config, body io.ReadCloser, fileHeader *multipart.FileH
 	return image, nil
 }
 
-func returnResult(writer http.ResponseWriter, result Result) error {
-	writer.Header().Add("Content-Type", "text/html")
-	body, err := json.Marshal(result)
-	if err != nil {
-		return err
-	}
-	writer.Write([]byte("<pre>"))
-	writer.Write(body)
-	writer.Write([]byte("</pre>"))
-	if result.Success {
-		writer.Write([]byte("<p><a href=\""))
-		writer.Write([]byte(fmt.Sprintf("https://i.k8r.eu/i/%s", result.Id)))
-		writer.Write([]byte("\">Uploaded Image</a></p>"))
-	}
-	return nil
-}
-
 type UserInfo struct {
 	Id    string
 	Name  string
@@ -105,6 +88,31 @@ func parseUser(r *http.Request) UserInfo {
 		r.Header.Get("X-Auth-Username"),
 		r.Header.Get("X-Auth-Email"),
 	}
+}
+
+type UploadData struct {
+	User   UserInfo
+	Result Result
+}
+
+func returnResult(w http.ResponseWriter, data UploadData) error {
+	var pageTemplate *template.Template
+	var err error
+	if data.Result.Success {
+		pageTemplate, err = template.New("upload_success.html").ParseFiles("templates/upload_success.html")
+	} else {
+		pageTemplate, err = template.New("upload_failure.html").ParseFiles("templates/upload_failure.html")
+	}
+	if err != nil {
+		return err
+	}
+
+	err = pageTemplate.Execute(w, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func main() {
@@ -131,10 +139,13 @@ func main() {
 			file, header, err := r.FormFile("file")
 			image, err := createImage(&config, file, header)
 			if err != nil {
-				returnResult(w, Result{
-					Id:      "",
-					Success: false,
-					Errors:  []string{err.Error()},
+				returnResult(w, UploadData{
+					user,
+					Result{
+						Id:      "",
+						Success: false,
+						Errors:  []string{err.Error()},
+					},
 				})
 				return
 			}
@@ -148,10 +159,13 @@ func main() {
 
 			data, err := json.Marshal(image)
 			if err != nil {
-				returnResult(w, Result{
-					Id:      image.Id,
-					Success: false,
-					Errors:  []string{err.Error()},
+				returnResult(w, UploadData{
+					user,
+					Result{
+						Id:      image.Id,
+						Success: false,
+						Errors:  []string{err.Error()},
+					},
 				})
 				return
 			}
@@ -165,10 +179,13 @@ func main() {
 			for waiting {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
-					returnResult(w, Result{
-						Id:      image.Id,
-						Success: false,
-						Errors:  []string{err.Error()},
+					returnResult(w, UploadData{
+						user,
+						Result{
+							Id:      image.Id,
+							Success: false,
+							Errors:  []string{err.Error()},
+						},
 					})
 					return
 				}
@@ -176,10 +193,13 @@ func main() {
 				result := Result{}
 				err = json.Unmarshal([]byte(message.Payload), &result)
 				if err != nil {
-					returnResult(w, Result{
-						Id:      image.Id,
-						Success: false,
-						Errors:  []string{err.Error()},
+					returnResult(w, UploadData{
+						user,
+						Result{
+							Id:      image.Id,
+							Success: false,
+							Errors:  []string{err.Error()},
+						},
 					})
 					return
 				}
@@ -189,7 +209,10 @@ func main() {
 				if result.Id == image.Id {
 					waiting = false
 
-					returnResult(w, result)
+					returnResult(w, UploadData{
+						user,
+						result,
+					})
 					return
 				}
 			}
@@ -200,7 +223,7 @@ func main() {
 				User UserInfo
 			}
 
-			tmpl, err := template.New("upload").ParseFiles("templates/upload")
+			tmpl, err := template.New("upload.html").ParseFiles("templates/upload.html")
 			if err != nil {
 				panic(err)
 			}
@@ -246,7 +269,7 @@ func main() {
 			images = append(images, info)
 		}
 
-		pageTemplate, err := template.New("me_images").ParseFiles("templates/me_images")
+		pageTemplate, err := template.New("me_images.html").ParseFiles("templates/me_images.html")
 		if err != nil {
 			panic(err)
 		}
@@ -268,7 +291,7 @@ func main() {
 			User UserInfo
 		}
 
-		tmpl, err := template.New("index").ParseFiles("templates/index")
+		tmpl, err := template.New("index.html").ParseFiles("templates/index.html")
 		if err != nil {
 			panic(err)
 		}

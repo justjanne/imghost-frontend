@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <title>My Images | ik8r</title>
 <link href="/assets/css/style.css" rel="stylesheet">
+<link href="/assets/css/fonts.css" rel="stylesheet">
 
 <p>Welcome, {{ .User.Name }}</p>
 <p>
@@ -13,11 +14,13 @@
 <div class="images">
     {{ range .Images }}
         <a class="image" href="/i/{{ .Id }}">
-            <img src="/i/{{ .Id }}t" >
-            <div class="text">
-                <p>{{ .OriginalName }}</p>
-                <p>{{ .CreatedAt }}</p>
-                <p>{{ .MimeType }}</p>
+            <div class="image-container">
+              <img src="/i/{{ .Id }}t" >
+            </div>
+            <div class="info">
+              <span>{{ .OriginalName }}</span>
+              <span>{{ .CreatedAt }}</span>
+              <span>{{ .MimeType }}</span>
             </div>
         </a>
     {{ end }}
