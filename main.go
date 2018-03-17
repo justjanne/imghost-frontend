@@ -314,7 +314,6 @@ func main() {
 	})
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", assetServer))
-	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		user := parseUser(r)
 
@@ -328,6 +327,7 @@ func main() {
 			panic(err)
 		}
 	})
+	http.Handle("/", imageServer)
 
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
