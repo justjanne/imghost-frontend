@@ -11,6 +11,7 @@ import (
 	"encoding/base64"
 	"crypto/rand"
 	"time"
+	"database/sql"
 )
 
 func writeBody(reader io.ReadCloser, path string) error {
@@ -102,17 +103,16 @@ func main() {
 		Password: config.Redis.Password,
 	})
 
-	//db, err := sql.Open(config.Database.Format, config.Database.Url)
-	//if err != nil {
-	//panic(err)
-	//}
+	db, err := sql.Open(config.Database.Format, config.Database.Url)
+	if err != nil {
+		panic(err)
+	}
 
 	staticServer := http.FileServer(http.Dir("static/"))
 	imageServer := http.FileServer(http.Dir(config.TargetFolder))
 
 	http.HandleFunc("/upload/", func(w http.ResponseWriter, r *http.Request) {
-		printHeaders(r)
-
+		user := r.Header.Get("X-Auth-Id")
 		if r.Method == "POST" {
 			r.ParseMultipartForm(32 << 20)
 			file, _, err := r.FormFile("file")
@@ -125,6 +125,13 @@ func main() {
 				})
 				return
 			}
+
+			result, err := db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user)
+			if err != nil {
+				panic(err)
+			}
+
+			println(result)
 
 			fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
 
@@ -186,7 +193,7 @@ func main() {
 		staticServer.ServeHTTP(w, r)
 	})
 
-	err := http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
 	}
