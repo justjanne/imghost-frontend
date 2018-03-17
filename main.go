@@ -315,19 +315,23 @@ func main() {
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", assetServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		user := parseUser(r)
+		if r.URL.Path == "/" {
+			user := parseUser(r)
 
-		type IndexData struct {
-			User UserInfo
-		}
+			type IndexData struct {
+				User UserInfo
+			}
 
-		if err = returnResult(w, "index.html", IndexData{
-			user,
-		}); err != nil {
-			panic(err)
+			if err = returnResult(w, "index.html", IndexData{
+				user,
+			}); err != nil {
+				panic(err)
+			}
+		} else {
+			imageServer.ServeHTTP(w, r)
 		}
 	})
-	http.Handle("/", imageServer)
+	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
 
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
