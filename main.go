@@ -294,8 +294,8 @@ func main() {
 				coalesce(original_name, ''),
 				coalesce(type, '')
 			FROM images
-			WHERE id = $2
-			`, user.Id, imageId)
+			WHERE id = $1
+			`, imageId)
 		if err != nil {
 			panic(err)
 		}
