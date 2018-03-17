@@ -11,6 +11,21 @@
     <a href="/upload">Upload</a>
 </p>
 
+{{ if .Result.Id }}
+    {{ if .Result.Success }}
+        <div class="info success">
+            <h2>Upload of {{ .Result.Id }} finished. <a href="/i/{{ .Result.Id }}">View</a>.</h2>
+        </div>
+    {{ else }}
+        <div class="info error">
+            <h2>Upload of {{ .Result.Id }} failed.</h2>
+            {{ range .Result.Errors }}
+                <pre>{{ . }}</pre>
+            {{ end }}
+        </div>
+    {{ end }}
+{{ end }}
+
 <form action="/upload/" method="POST" enctype="multipart/form-data">
     <input type="file" name="file"/>
     <input type="submit"/>

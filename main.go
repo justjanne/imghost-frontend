@@ -95,14 +95,8 @@ type UploadData struct {
 	Result Result
 }
 
-func returnResult(w http.ResponseWriter, data UploadData) error {
-	var pageTemplate *template.Template
-	var err error
-	if data.Result.Success {
-		pageTemplate, err = template.New("upload_success.html").ParseFiles("templates/upload_success.html")
-	} else {
-		pageTemplate, err = template.New("upload_failure.html").ParseFiles("templates/upload_failure.html")
-	}
+func returnResult(w http.ResponseWriter, templateName string, data interface{}) error {
+	pageTemplate, err := template.New(templateName).ParseFiles(fmt.Sprintf("templates/%s", templateName))
 	if err != nil {
 		return err
 	}
@@ -139,7 +133,7 @@ func main() {
 			file, header, err := r.FormFile("file")
 			image, err := createImage(&config, file, header)
 			if err != nil {
-				returnResult(w, UploadData{
+				returnResult(w, "upload.html", UploadData{
 					user,
 					Result{
 						Id:      "",
@@ -159,14 +153,16 @@ func main() {
 
 			data, err := json.Marshal(image)
 			if err != nil {
-				returnResult(w, UploadData{
+				if err = returnResult(w, "upload.html", UploadData{
 					user,
 					Result{
 						Id:      image.Id,
 						Success: false,
 						Errors:  []string{err.Error()},
 					},
-				})
+				}); err != nil {
+					panic(err)
+				}
 				return
 			}
 
@@ -179,28 +175,32 @@ func main() {
 			for waiting {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
-					returnResult(w, UploadData{
+					if err = returnResult(w, "upload.html", UploadData{
 						user,
 						Result{
 							Id:      image.Id,
 							Success: false,
 							Errors:  []string{err.Error()},
 						},
-					})
+					}); err != nil {
+						panic(err)
+					}
 					return
 				}
 
 				result := Result{}
 				err = json.Unmarshal([]byte(message.Payload), &result)
 				if err != nil {
-					returnResult(w, UploadData{
+					if err = returnResult(w, "upload.html", UploadData{
 						user,
 						Result{
 							Id:      image.Id,
 							Success: false,
 							Errors:  []string{err.Error()},
 						},
-					})
+					}); err != nil {
+						panic(err)
+					}
 					return
 				}
 
@@ -209,28 +209,21 @@ func main() {
 				if result.Id == image.Id {
 					waiting = false
 
-					returnResult(w, UploadData{
+					if err = returnResult(w, "upload.html", UploadData{
 						user,
 						result,
-					})
+					}); err != nil {
+						panic(err)
+					}
 					return
 				}
 			}
 		} else {
 			user := parseUser(r)
-
-			type UploadData struct {
-				User UserInfo
-			}
-
-			tmpl, err := template.New("upload.html").ParseFiles("templates/upload.html")
-			if err != nil {
-				panic(err)
-			}
-			err = tmpl.Execute(w, UploadData{
+			if err = returnResult(w, "upload.html", UploadData{
 				user,
-			})
-			if err != nil {
+				Result{},
+			}); err != nil {
 				panic(err)
 			}
 		}
@@ -269,15 +262,10 @@ func main() {
 			images = append(images, info)
 		}
 
-		pageTemplate, err := template.New("me_images.html").ParseFiles("templates/me_images.html")
-		if err != nil {
-			panic(err)
-		}
-		err = pageTemplate.Execute(w, ImageListData{
+		if err = returnResult(w, "me_images.html", ImageListData{
 			user,
 			images,
-		})
-		if err != nil {
+		}); err != nil {
 			panic(err)
 		}
 	})
@@ -291,14 +279,9 @@ func main() {
 			User UserInfo
 		}
 
-		tmpl, err := template.New("index.html").ParseFiles("templates/index.html")
-		if err != nil {
-			panic(err)
-		}
-		err = tmpl.Execute(w, IndexData{
+		if err = returnResult(w, "index.html", IndexData{
 			user,
-		})
-		if err != nil {
+		}); err != nil {
 			panic(err)
 		}
 	})
