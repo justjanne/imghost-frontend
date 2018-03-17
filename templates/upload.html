@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>Upload | ik8r</title>
-<link href="/assets/css/style.css" rel="stylesheet">
-<link href="/assets/css/fonts.css" rel="stylesheet">
-
-<p>Welcome, {{ .User.Name }}</p>
-<p>
-    <a href="/me/images">My Images</a> |
-    <a href="/me/albums">My Albums</a> |
-    <a href="/upload">Upload</a>
-</p>
-
+{{define "title"}}Upload | ik8r{{end}}
+{{define "content"}}
 {{ range .Results }}
 {{ if .Success }}
 <div class="info success">
@@ -30,3 +19,4 @@
     <input type="file" name="file" accept="image/jpeg,image/png,image/bmp,*.jpeg,*.jpg,*.png,*.bmp" multiple/>
     <input type="submit"/>
 </form>
+{{end}}

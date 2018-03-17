@@ -1,0 +1,10 @@
+{{ define "navigation" }}
+{{ if .Id }}
+<p>Welcome, {{ .Name }}</p>
+<p>
+    <a href="/me/images">My Images</a> |
+    <a href="/me/albums">My Albums</a> |
+    <a href="/upload">Upload</a>
+</p>
+{{ end }}
+{{ end}}

@@ -96,7 +96,13 @@ type UploadData struct {
 }
 
 func returnResult(w http.ResponseWriter, templateName string, data interface{}) error {
-	pageTemplate, err := template.New(templateName).ParseFiles(fmt.Sprintf("templates/%s", templateName))
+	pageTemplate, err := template.ParseFiles(
+		"templates/_base.html",
+		"templates/_header.html",
+		"templates/_navigation.html",
+		"templates/_footer.html",
+		fmt.Sprintf("templates/%s", templateName),
+	)
 	if err != nil {
 		return err
 	}

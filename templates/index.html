@@ -1,14 +1,2 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>ik8r</title>
-<link href="/assets/css/style.css" rel="stylesheet">
-<link href="/assets/css/fonts.css" rel="stylesheet">
-
-{{ if .User.Id }}
-    <p>Welcome, {{ .User.Name }}</p>
-    <p>
-        <a href="/me/images">My Images</a> |
-        <a href="/me/albums">My Albums</a> |
-        <a href="/upload">Upload</a>
-    </p>
-{{ end }}
+{{define "title"}}ik8r{{end}}
+{{define "content"}}{{end}}

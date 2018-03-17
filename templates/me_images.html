@@ -1,27 +1,17 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>My Images | ik8r</title>
-<link href="/assets/css/style.css" rel="stylesheet">
-<link href="/assets/css/fonts.css" rel="stylesheet">
-
-<p>Welcome, {{ .User.Name }}</p>
-<p>
-    <a href="/me/images">My Images</a> |
-    <a href="/me/albums">My Albums</a> |
-    <a href="/upload">Upload</a>
-</p>
-
+{{define "title"}}My Images | ik8r{{end}}
+{{define "content"}}
 <div class="images">
-    {{ range .Images }}
-        <a class="image" href="/i/{{ .Id }}">
-            <div class="image-container">
-              <img src="/i/{{ .Id }}t" >
-            </div>
-            <div class="info">
-              <p>{{ .OriginalName }}</p>
-              <p><time>{{ .CreatedAt.Format "2006-01-02 15:04" }}</time></p>
-              <p>{{ .MimeType }}</p>
-            </div>
-        </a>
-    {{ end }}
+{{ range .Images }}
+    <a class="image" href="/i/{{ .Id }}">
+        <div class="image-container">
+            <img src="/i/{{ .Id }}t" >
+        </div>
+        <div class="info">
+            <p>{{ .OriginalName }}</p>
+            <p><time>{{ .CreatedAt.Format "2006-01-02 15:04" }}</time></p>
+            <p>{{ .MimeType }}</p>
+        </div>
+    </a>
+{{ end }}
 </div>
+{{end}}
