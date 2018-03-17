@@ -27,6 +27,6 @@
 {{ end }}
 
 <form action="/upload/" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file"/>
+    <input type="file" name="file" accept="image/jpeg,image/png,image/bmp,*.jpeg,*.jpg,*.png,*.bmp" multiple/>
     <input type="submit"/>
 </form>
