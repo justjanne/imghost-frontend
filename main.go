@@ -342,13 +342,8 @@ func main() {
 			}
 		}
 
-		if err = returnResult(w, "image_detail.html", ImageDetailData{
-			user,
-			Image{},
-			false,
-		}); err != nil {
-			panic(err)
-		}
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, "Image not found")
 	})))
 
 	http.HandleFunc("/me/images/", func(w http.ResponseWriter, r *http.Request) {
