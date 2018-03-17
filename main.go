@@ -180,7 +180,7 @@ func main() {
 			}
 
 			pubsub := client.Subscribe(config.ResultChannel)
-
+			waiting := make(map[string]bool)
 			for _, image := range images {
 				_, err = db.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
 				if err != nil {
@@ -204,11 +204,11 @@ func main() {
 				fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
 				client.RPush(fmt.Sprintf("queue:%s", config.ImageQueue), data)
 				fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+
+				waiting[image.Id] = true
 			}
 
 			var results []Result
-
-			var waiting map[string]bool
 			for len(waiting) != 0 {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
