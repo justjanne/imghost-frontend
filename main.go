@@ -93,13 +93,6 @@ func returnResult(writer http.ResponseWriter, result Result) error {
 	return nil
 }
 
-func printHeaders(r *http.Request) {
-	fmt.Println(r.URL)
-	for key, value := range r.Header {
-		fmt.Printf("  %s: %s\n", key, value)
-	}
-}
-
 type UserInfo struct {
 	Id    string
 	Name  string
@@ -134,8 +127,8 @@ func main() {
 			user := parseUser(r)
 
 			r.ParseMultipartForm(32 << 20)
-			file, fileheader, err := r.FormFile("file")
-			image, err := createImage(&config, file, fileheader)
+			file, header, err := r.FormFile("file")
+			image, err := createImage(&config, file, header)
 			if err != nil {
 				returnResult(w, Result{
 					Id:      "",
@@ -242,11 +235,11 @@ func main() {
 			images = append(images, info)
 		}
 
-		template, err := template.New("me_images").ParseFiles("templates/me_images")
+		pageTemplate, err := template.New("me_images").ParseFiles("templates/me_images")
 		if err != nil {
 			panic(err)
 		}
-		err = template.Execute(w, ImageListData{
+		err = pageTemplate.Execute(w, ImageListData{
 			user,
 			images,
 		})
