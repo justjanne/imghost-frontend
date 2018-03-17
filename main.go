@@ -482,7 +482,6 @@ func main() {
 			imageServer.ServeHTTP(w, r)
 		}
 	})
-	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
 
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
