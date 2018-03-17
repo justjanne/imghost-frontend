@@ -1,19 +1,20 @@
 package main
 
 import (
-	"os"
-	"net/http"
-	"io"
-	"path/filepath"
-	"encoding/json"
-	"github.com/go-redis/redis"
-	"fmt"
-	"encoding/base64"
 	"crypto/rand"
-	"time"
 	"database/sql"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 	"html/template"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"path/filepath"
+	"time"
 )
 
 func writeBody(reader io.ReadCloser, path string) error {
@@ -52,7 +53,7 @@ func generateId() string {
 	return base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(buffer)
 }
 
-func createImage(config *Config, body io.ReadCloser) (Image, error) {
+func createImage(config *Config, body io.ReadCloser, fileHeader *multipart.FileHeader) (Image, error) {
 	id := generateId()
 	path := filepath.Join(config.SourceFolder, id)
 
@@ -67,8 +68,10 @@ func createImage(config *Config, body io.ReadCloser) (Image, error) {
 	}
 
 	image := Image{
-		Id:       id,
-		MimeType: mimeType,
+		Id:           id,
+		OriginalName: filepath.Base(fileHeader.Filename),
+		CreatedAt:    time.Now(),
+		MimeType:     mimeType,
 	}
 	return image, nil
 }
@@ -131,8 +134,8 @@ func main() {
 			user := parseUser(r)
 
 			r.ParseMultipartForm(32 << 20)
-			file, _, err := r.FormFile("file")
-			image, err := createImage(&config, file)
+			file, fileheader, err := r.FormFile("file")
+			image, err := createImage(&config, file, fileheader)
 			if err != nil {
 				returnResult(w, Result{
 					Id:      "",
@@ -142,7 +145,7 @@ func main() {
 				return
 			}
 
-			_, err = db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user.Id)
+			_, err = db.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
 			if err != nil {
 				panic(err)
 			}
@@ -221,29 +224,29 @@ func main() {
 
 		type ImageListData struct {
 			User   UserInfo
-			Images []string
+			Images []Image
 		}
 
-		result, err := db.Query("SELECT id FROM images WHERE owner = $1", user.Id)
+		result, err := db.Query("SELECT id, title, description, created_at, original_name, type FROM images WHERE owner = $1", user.Id)
 		if err != nil {
 			panic(err)
 		}
 
-		var images []string
+		var images []Image
 		for result.Next() {
-			var id string
-			err := result.Scan(&id)
+			var info Image
+			err := result.Scan(&info.Id, &info.Title, &info.Description, &info.CreatedAt, &info.OriginalName, &info.MimeType)
 			if err != nil {
 				panic(err)
 			}
-			images = append(images, id)
+			images = append(images, info)
 		}
 
-		tmpl, err := template.New("me_images").ParseFiles("templates/me_images")
+		template, err := template.New("me_images").ParseFiles("templates/me_images")
 		if err != nil {
 			panic(err)
 		}
-		err = tmpl.Execute(w, ImageListData{
+		err = template.Execute(w, ImageListData{
 			user,
 			images,
 		})

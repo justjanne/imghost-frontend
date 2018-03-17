@@ -8,7 +8,10 @@
 </p>
 
 {{ range .Images }}
-    <a href="/i/{{ . }}">
-        <img src="/i/{{ . }}t" >
+    <a href="/i/{{ .Id }}">
+        <img src="/i/{{ .Id }}t" >
+        <p>{{ .OriginalName }}</p>
+        <p>{{ .CreatedAt }}</p>
+        <p>{{ .MimeType }}</p>
     </a>
 {{ end }}

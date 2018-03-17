@@ -1,13 +1,18 @@
 package main
 
 import (
-	"os"
 	"encoding/json"
+	"os"
+	"time"
 )
 
 type Image struct {
-	Id       string `json:"id"`
-	MimeType string `json:"mime_type"`
+	Id           string `json:"id"`
+	Title        string
+	Description  string
+	CreatedAt    time.Time
+	OriginalName string
+	MimeType     string `json:"mime_type"`
 }
 
 type Result struct {
@@ -23,8 +28,8 @@ type Size struct {
 }
 
 const (
-	SIZE_FORMAT_COVER   = "cover"
-	SIZE_FORMAT_CONTAIN = "contain"
+	sizeFormatCover   = "cover"
+	sizeFormatContain = "contain"
 )
 
 type Quality struct {
