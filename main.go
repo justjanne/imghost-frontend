@@ -12,6 +12,8 @@ import (
 	"crypto/rand"
 	"time"
 	"database/sql"
+	_ "github.com/lib/pq"
+	"html/template"
 )
 
 func writeBody(reader io.ReadCloser, path string) error {
@@ -95,6 +97,20 @@ func printHeaders(r *http.Request) {
 	}
 }
 
+type UserInfo struct {
+	Id    string
+	Name  string
+	Email string
+}
+
+func parseUser(r *http.Request) UserInfo {
+	return UserInfo{
+		r.Header.Get("X-Auth-Subject"),
+		r.Header.Get("X-Auth-Username"),
+		r.Header.Get("X-Auth-Email"),
+	}
+}
+
 func main() {
 	config := NewConfigFromEnv()
 
@@ -108,12 +124,12 @@ func main() {
 		panic(err)
 	}
 
-	staticServer := http.FileServer(http.Dir("static/"))
 	imageServer := http.FileServer(http.Dir(config.TargetFolder))
 
 	http.HandleFunc("/upload/", func(w http.ResponseWriter, r *http.Request) {
-		user := r.Header.Get("X-Auth-Id")
 		if r.Method == "POST" {
+			user := parseUser(r)
+
 			r.ParseMultipartForm(32 << 20)
 			file, _, err := r.FormFile("file")
 			image, err := createImage(&config, file)
@@ -126,7 +142,7 @@ func main() {
 				return
 			}
 
-			_, err = db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user)
+			_, err = db.Exec("INSERT INTO images (id, owner) VALUES ($1, $2)", image.Id, user.Id)
 			if err != nil {
 				panic(err)
 			}
@@ -181,14 +197,79 @@ func main() {
 				}
 			}
 		} else {
-			staticServer.ServeHTTP(w, r)
+			user := parseUser(r)
+
+			type UploadData struct {
+				User UserInfo
+			}
+
+			tmpl, err := template.New("upload").ParseFiles("templates/upload")
+			if err != nil {
+				panic(err)
+			}
+			err = tmpl.Execute(w, UploadData{
+				user,
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	})
+
+	http.HandleFunc("/me/images/", func(w http.ResponseWriter, r *http.Request) {
+		user := parseUser(r)
+
+		type ImageListData struct {
+			User   UserInfo
+			Images []string
+		}
+
+		result, err := db.Query("SELECT id FROM images WHERE owner = $1", user.Id)
+		if err != nil {
+			panic(err)
+		}
+
+		var images []string
+		for result.Next() {
+			var id string
+			err := result.Scan(&id)
+			if err != nil {
+				panic(err)
+			}
+			images = append(images, id)
+		}
+
+		tmpl, err := template.New("me_images").ParseFiles("templates/me_images")
+		if err != nil {
+			panic(err)
+		}
+		err = tmpl.Execute(w, ImageListData{
+			user,
+			images,
+		})
+		if err != nil {
+			panic(err)
 		}
 	})
 
 	http.Handle("/i/", http.StripPrefix("/i/", imageServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		printHeaders(r)
-		staticServer.ServeHTTP(w, r)
+		user := parseUser(r)
+
+		type IndexData struct {
+			User UserInfo
+		}
+
+		tmpl, err := template.New("index").ParseFiles("templates/index")
+		if err != nil {
+			panic(err)
+		}
+		err = tmpl.Execute(w, IndexData{
+			user,
+		})
+		if err != nil {
+			panic(err)
+		}
 	})
 
 	err = http.ListenAndServe(":8080", nil)

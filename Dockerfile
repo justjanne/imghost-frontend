@@ -11,5 +11,5 @@ RUN CGO_ENABLED=false go build -a app .
 FROM alpine:3.7
 WORKDIR /
 COPY --from=builder /go/src/app/app /app
-COPY --from=builder /go/src/app/static /static
+COPY --from=builder /go/src/app/templates /templates
 CMD ["/app"]

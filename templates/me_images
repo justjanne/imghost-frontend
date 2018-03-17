@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<p>Welcome, {{ .User.Name }}</p>
+<p>
+    <a href="/me/images">My Images</a> |
+    <a href="/me/albums">My Albums</a> |
+    <a href="/upload">Upload</a>
+</p>
+
+{{ range .Images }}
+    <a href="/i/{{ . }}">
+        <img src="/i/{{ . }}t" >
+    </a>
+{{ end }}
