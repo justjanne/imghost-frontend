@@ -283,7 +283,7 @@ func main() {
 			IsMine bool
 		}
 
-		imageId := r.URL
+		_, imageId := path.Split(r.URL.Path)
 		result, err := db.Query(`
 			SELECT
 				id,
