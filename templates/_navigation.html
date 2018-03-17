@@ -3,10 +3,13 @@
     <ul>
         <li class="title">ik8r</li>
     {{if .Id}}
-        <li class="upload"><a href="/upload">Upload</a></li>
-        <li class="images"><a href="/me/images">My Images</a></li>
-        <li class="albums"><a href="/me/albums">My Albums</a></li>
-        <li class="me"><a href="/me/">{{.Name}}</a></li>
+        <li><a href="/upload">Upload</a></li>
+    {{end}}
+        <li class="spacer"></li>
+    {{if .Id}}
+        <li><a href="/me/images">My Images</a></li>
+        <li><a href="/me/albums">My Albums</a></li>
+        <li><a href="/me/">{{.Name}}</a></li>
     {{end}}
     </ul>
 </nav>
