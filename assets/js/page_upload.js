@@ -30,6 +30,9 @@ element.addEventListener("change", () => {
             image_title.setAttribute("placeholder", "Title");
             image_container.appendChild(image_title);
 
+            const image_link = document.createElement("a");
+            image_link.classList.add("image");
+
             const image_progress = document.createElement("div");
             image_progress.classList.add("progress");
 
@@ -37,13 +40,12 @@ element.addEventListener("change", () => {
             image_progress_indeterminate.classList.add("indeterminate");
 
             image_progress.appendChild(image_progress_indeterminate);
-            image_container.appendChild(image_progress);
+            image_link.appendChild(image_progress);
 
-            const image_link = document.createElement("a");
-            image_link.classList.add("image");
             const image = document.createElement("img");
             image.src = dataUrl;
             image_link.appendChild(image);
+
             image_container.appendChild(image_link);
 
             const image_description = document.createElement("p");
@@ -60,6 +62,7 @@ element.addEventListener("change", () => {
             data.append("file", file, file.name);
 
             postData("/upload/", data).then((json) => {
+                image_container.classList.remove("uploading");
                 if (json.success) {
                     image_link.href = "/" + json.id;
                     image.src = "/" + json.id;
@@ -68,7 +71,6 @@ element.addEventListener("change", () => {
                     image_error.classList.add("alert", "error");
                     image_error.innerText = JSON.stringify(json.errors);
                     image_container.insertBefore(image_error, image_description);
-                    image_container.classList.remove("uploading");
                 }
 
                 console.log(json);
