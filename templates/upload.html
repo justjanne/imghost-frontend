@@ -44,9 +44,14 @@
                 img.src = e.target.result;
                 node.appendChild(img);
                 results.appendChild(node);
+
+                const data = new FormData();
+                data.append("file", file);
+
                 fetch("/upload", {
                     method: "POST",
-                    credentials: "same-origin"
+                    credentials: "same-origin",
+                    body: data
                 }).then((response) => {
                     return response.json()
                 }).then((json) => {
