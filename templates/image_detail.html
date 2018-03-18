@@ -13,6 +13,11 @@
     {{if .IsMine}}
         <p class="description fake-input" contenteditable="true" placeholder="Description"
            data-multiline>{{.Image.Description}}</p>
+    {{else}}
+        <div class="description">{{.Image.Description}}</div>
+    {{end}}
+    </div>
+    <div class="sidebar">
         <div class="actions">
             <form class="delete-form" method="post">
                 <input type="hidden" name="action" value="delete">
@@ -31,9 +36,6 @@
         <div class="url">
             <input type="text" value="https://i.k8r.eu/{{.Image.Id}}">
         </div>
-    {{else}}
-        <div class="description">{{.Image.Description}}</div>
-    {{end}}
     </div>
 </div>
 {{if .IsMine}}
