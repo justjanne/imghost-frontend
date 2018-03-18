@@ -13,6 +13,7 @@ const page = document.querySelector(".page.upload");
 const form = document.querySelector("form.upload");
 const element = document.querySelector("form.upload input[type=file]");
 const results = document.querySelector(".uploading.images");
+const sidebar = document.querySelector(".uploading.images .sidebar");
 element.addEventListener("change", () => {
     page.classList.add("submitted");
     for (let file of element.files) {
@@ -43,7 +44,7 @@ element.addEventListener("change", () => {
             image_description.dataset["multiline"] = "true";
             image_container.appendChild(image_description);
 
-            results.appendChild(image_container);
+            results.insertBefore(image_container, sidebar);
             initFakeInput();
 
             const data = new FormData();
