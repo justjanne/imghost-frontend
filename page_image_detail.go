@@ -65,7 +65,7 @@ func pageImageDetail(ctx PageContext) http.Handler {
 				}
 				for _, definition := range ctx.Config.Sizes {
 					err := os.Remove(path.Join(ctx.Config.TargetFolder, fmt.Sprintf("%s%s", info.Id, definition.Suffix)))
-					if !os.IsNotExist(err) {
+					if err != nil && !os.IsNotExist(err) {
 						panic(err)
 					}
 				}
