@@ -55,7 +55,11 @@ func pageImageDetail(ctx PageContext) http.Handler {
 				if err != nil {
 					panic(err)
 				}
-				http.Redirect(w, r, r.URL.Path, http.StatusFound)
+				if r.PostFormValue("fromjs") == "true" {
+					returnJson(w, true)
+				} else {
+					http.Redirect(w, r, r.URL.Path, http.StatusFound)
+				}
 				return
 			case "delete":
 				_, err = ctx.Database.Exec("DELETE FROM images WHERE id = $1 AND owner = $2", info.Id, user.Id)

@@ -22,6 +22,7 @@ let lastTimeOut = null;
 
 const doSave = () => {
     const data = new FormData(document.forms.namedItem("upload"));
+    data.append("from_js", "true");
     save.value = "Saving…";
     postData(location.href, data).then((json) => {
         save.value = "Saved";
