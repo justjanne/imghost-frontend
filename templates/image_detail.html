@@ -20,17 +20,17 @@
     <div class="sidebar">
     {{if .IsMine}}
         <div class="actions">
-            <form class="delete-form" method="post">
+            <form name="delete" class="delete-form" method="post">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" value="{{.Image.Id}}">
                 <input type="submit" value="Delete">
             </form>
-            <form class="update-form" method="post">
+            <form name="upload" class="update-form" method="post">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="id" value="{{.Image.Id}}">
                 <input type="hidden" name="title" value="{{.Image.Title}}">
                 <input type="hidden" name="description" value="{{.Image.Description}}">
-                <input type="submit" value="Save">
+                <input type="submit" id="save" value="Save">
             </form>
         </div>
     {{end}}
