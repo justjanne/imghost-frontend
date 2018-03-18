@@ -19,13 +19,19 @@ const save = document.querySelector("#save");
 const updateForm = document.querySelector(".update-form");
 
 let lastTimeOut = null;
+let lastSaved = null;
 
-const doSave = () => {
+const currentState = () => {
     const data = new FormData(document.forms.namedItem("upload"));
     data.append("from_js", "true");
+};
+
+const doSave = () => {
+    const data = currentState();
     save.value = "Saving…";
     postData(location.href, data).then((json) => {
         save.value = "Saved";
+        lastSaved = data;
     })
 };
 
@@ -72,3 +78,10 @@ save.addEventListener("click", (e) => {
 
     doSave();
 });
+
+window.onbeforeunload = (e) => {
+    const state = currentState();
+    if (lastSaved !== null && lastSaved !== state) {
+        return "Your changes have not been saved. Are you sure you want to leave?"
+    }
+};
