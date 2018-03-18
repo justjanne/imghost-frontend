@@ -55,7 +55,7 @@ func pageImageDetail(ctx PageContext) http.Handler {
 				if err != nil {
 					panic(err)
 				}
-				if r.PostFormValue("fromjs") == "true" {
+				if r.PostFormValue("from_js") == "true" {
 					returnJson(w, true)
 				} else {
 					http.Redirect(w, r, r.URL.Path, http.StatusFound)
