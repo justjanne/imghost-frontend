@@ -1,4 +1,8 @@
 .page.upload
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+
   .alert
     padding: 16px
     margin: 16px 0
@@ -170,7 +174,7 @@
     .fake-input[contenteditable]:empty:before
       opacity: 0.4
       content: attr(placeholder)
-  &.submitted form.upload
+  &.submitted .container.centered
     display: none
   &:not(.submitted) .uploading.images
     display: none
