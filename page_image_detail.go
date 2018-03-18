@@ -62,8 +62,12 @@ func pageImageDetail(ctx PageContext) http.Handler {
 					panic(err)
 				}
 				for _, definition := range ctx.Config.Sizes {
-					os.Remove(path.Join(ctx.Config.TargetFolder, fmt.Sprintf("%s%s", info.Id, definition.Suffix)))
+					err := os.Remove(path.Join(ctx.Config.TargetFolder, fmt.Sprintf("%s%s", info.Id, definition.Suffix)))
+					if !os.IsNotExist(err) {
+						panic(err)
+					}
 				}
+				http.Redirect(w, r, "/me/images", http.StatusTemporaryRedirect)
 				return
 			default:
 				if err = formatTemplate(w, "image_detail.html", ImageDetailData{
