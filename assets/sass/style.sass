@@ -181,8 +181,6 @@ form.upload
     &:not(.fake-input):empty
       display: none
 
-.fake-input[contenteditable]
-  margin: 0
-  &:empty:before
-    opacity: 0.4
-    content: attr(placeholder)
+.fake-input[contenteditable]:empty:before
+  opacity: 0.4
+  content: attr(placeholder)
