@@ -12,7 +12,7 @@ func headerWrapper(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		println(r.URL.Path)
 		for key, value := range r.Header {
-			fmt.Printf("%s: %s", key, value)
+			fmt.Printf("%s: %s\n", key, value)
 		}
 		handler.ServeHTTP(w, r)
 	})
