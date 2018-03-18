@@ -30,8 +30,10 @@ const currentState = () => {
 
 const formDataToJson = (data) => {
     const result = {};
-    for (let key of data.keys()) {
-        result[key] = data.getAll(key);
+    if (data != null) {
+        for (let key of data.keys()) {
+            result[key] = data.getAll(key);
+        }
     }
     return result;
 };
