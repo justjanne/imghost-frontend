@@ -4,9 +4,9 @@ RUN apk add --no-cache curl git gcc musl-dev
 RUN curl https://glide.sh/get | sh
 
 WORKDIR /go/src/app
-COPY *.go ./
 COPY glide.* ./
 RUN glide install
+COPY *.go ./
 RUN CGO_ENABLED=false go build -a app .
 
 FROM node:alpine as asset_builder
