@@ -1,5 +1,4 @@
 const keyListener = (event) => {
-    console.log(event.which);
     if (event.which === 13) {
         event.preventDefault();
     }
