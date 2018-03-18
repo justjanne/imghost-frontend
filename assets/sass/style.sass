@@ -96,12 +96,9 @@ form.upload
   text-align: center
   background: #333333
 
-  &:not(.submitted)
-    .upload-label
-      display: none
-  .submitted
-    label, input
-      display: none
+  .upload-label
+    font-size: 18pt
+    color: #fff
 
   label
     position: relative
@@ -133,6 +130,13 @@ form.upload
 
   input[type=submit]
     display: none
+
+  &:not(.submitted)
+    .upload-label
+      display: none
+  .submitted
+    label, input
+      display: none
 
 .images
   display: flex
