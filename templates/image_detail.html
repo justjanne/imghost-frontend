@@ -3,7 +3,7 @@
 <form class="detail" method="post">
     <input type="hidden" name="action" value="update">
 {{if .IsMine}}
-    <input name="title" class="title" value="{{.Image.Title}}" placeholder="Title">
+    <h2 class="title fake-input" contenteditable="true" placeholder="Title">{{.Image.Title}}</h2>
 {{else}}
     <h2 class="title">{{.Image.Title}}</h2>
 {{end}}
@@ -11,18 +11,9 @@
         <img src="/{{.Image.Id}}">
     </div>
 {{if .IsMine}}
-    <textarea name="description" class="description" placeholder="Description">{{.Image.Description}}</textarea>
+    <div class="description fake-input" contenteditable="true" placeholder="Description">{{.Image.Description}}</div>
 {{else}}
     <div class="description">{{.Image.Description}}</div>
-{{end}}
-{{if .IsMine}}
-    <div class="controls">
-        <form method="post" class="delete-form">
-            <input type="hidden" name="action" value="delete">
-            <input type="submit" value="Delete">
-        </form>
-        <input type="submit" value="Save">
-    </div>
 {{end}}
 </form>
 {{end}}

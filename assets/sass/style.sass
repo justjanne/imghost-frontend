@@ -180,3 +180,7 @@ form.upload
     resize: vertical
     &:not(input):not(textarea):empty
       display: none
+
+.fake-input[contenteditable]:empty:before
+  opacity: 0.8
+  content: attr(placeholder)
