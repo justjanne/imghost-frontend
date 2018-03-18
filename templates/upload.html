@@ -1,6 +1,6 @@
 {{define "title"}}Upload | i.k8r{{end}}
 {{define "content"}}
-<div class="container centered">
+<div class="page upload container centered">
 {{range .Results}}
 {{if .Success}}
     <div class="alert success">
@@ -24,8 +24,6 @@
             <span class="text">Select Files</span>
             <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
         </label>
-        <input type="submit" value="Upload"/>
-        <p class="upload-label">Uploading…</p>
     </form>
     <div class="uploading images"></div>
 </div>

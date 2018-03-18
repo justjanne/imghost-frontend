@@ -1,62 +1,57 @@
-.alert
-  padding: 16px
-  margin: 16px 0
-  box-shadow: 0 2px 4px rgba(33, 33, 33, 0.2)
-  text-decoration: none
-  border-radius: 2px
-  &.success
-    background: #DCEDC8
-    color: #689F38
-    border-color: #689F38
-    a
-      color: #33691E
-  &.error
-    background: #FFEBEE
-    color: #F44336
-    border-color: #F44336
-    a
-      color: #D32F2F
+.page.upload
+  .alert
+    padding: 16px
+    margin: 16px 0
+    box-shadow: 0 2px 4px rgba(33, 33, 33, 0.2)
+    text-decoration: none
+    border-radius: 2px
+    &.success
+      background: #DCEDC8
+      color: #689F38
+      border-color: #689F38
+      a
+        color: #33691E
+    &.error
+      background: #FFEBEE
+      color: #F44336
+      border-color: #F44336
+      a
+        color: #D32F2F
 
-form.upload
-  padding: 96px 0
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
-  text-decoration: none
-  border-radius: 2px
-  text-align: center
-  background: #333333
-  .upload-label
-    font-size: 18pt
-    color: #fff
-  label
-    position: relative
-    display: inline-block
-    overflow: hidden
-    span.text
+  form.upload
+    padding: 96px 0
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+    text-decoration: none
+    border-radius: 2px
+    text-align: center
+    background: #333333
+    .upload-label
+      font-size: 18pt
+      color: #fff
+    label
       position: relative
       display: inline-block
-      background: #FFC107
-      padding: 4px 16px
-      border-radius: 2px
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
-      line-height: 24px
-      color: #282828
-      cursor: pointer
-      z-index: 1
-      &:hover, &:focus
-        background: #FFD54F
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
-    input[type=file]
-      position: absolute
-      left: 0
-      right: 0
-      top: 0
-      bottom: 0
-      opacity: 0
-  input[type=submit]
-    display: none
-  &:not(.submitted)
-    .upload-label
-      display: none
-  .submitted
-    label, input
+      overflow: hidden
+      span.text
+        position: relative
+        display: inline-block
+        background: #FFC107
+        padding: 4px 16px
+        border-radius: 2px
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+        line-height: 24px
+        color: #282828
+        cursor: pointer
+        z-index: 1
+        &:hover, &:focus
+          background: #FFD54F
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+      input[type=file]
+        position: absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        opacity: 0
+    &.submitted
       display: none
