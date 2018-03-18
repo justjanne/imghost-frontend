@@ -148,15 +148,12 @@
             border-top-left-radius: 4px
             border-top-right-radius: 4px
       .progress
-        position: absolute
+        position: relative
         height: 4px
         display: block
         background-color: rgba(255, 193, 7, 0.2)
         overflow: hidden
         transition: opacity 400ms
-        bottom: 0
-        left: 0
-        right: 0
         .indeterminate
           background-color: rgba(255, 193, 7, 0.8)
           &::before
@@ -178,6 +175,8 @@
             will-change: left, right
             animation: indeterminate-short 4.2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite
             animation-delay: 2.25s
+      &:not(.uploading).progress
+        display: none
       .image
         background: #000
         display: flex
