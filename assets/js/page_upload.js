@@ -68,6 +68,7 @@ element.addEventListener("change", () => {
                     image_error.classList.add("alert", "error");
                     image_error.innerText = JSON.stringify(json.errors);
                     image_container.insertBefore(image_error, image_description);
+                    image_container.classList.remove("uploading");
                 }
 
                 console.log(json);
