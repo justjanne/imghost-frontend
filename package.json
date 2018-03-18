@@ -1,11 +1,9 @@
 {
   "scripts": {
     "sass": "node_modules/node-sass/bin/node-sass --output-style compressed assets/sass -o assets/css",
-    "jsx": "node_modules/nativejsx/bin/nativejsx assets/js/*.jsx",
-    "build": "npm run sass && npm run jsx"
+    "build": "npm run sass"
   },
   "devDependencies": {
-    "nativejsx": "https://github.com/j3l11234/nativejsx/archive/4.2.0.2.tar.gz",
     "node-sass": "^4.7.2"
   }
 }

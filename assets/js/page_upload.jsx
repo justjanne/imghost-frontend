@@ -18,27 +18,43 @@ element.addEventListener("change", () => {
         reader.addEventListener("load", (e) => {
             const dataUrl = e.target.result;
 
-            const node = <div className="uploading image">
-                <h2 className="title fake-input" contentEditable="true" placeholder="Title"/>
-                <a className="image">
-                    <img src={dataUrl}/>
-                </a>
-                <p className="description fake-input" contentEditable="true" placeholder="Description" data-multiline/>
-            </div>;
-            results.appendChild(node);
+            const image_container = document.createElement("div");
+            image_container.classList.add("uploading", "image");
+
+            const image_title = document.createElement("h2");
+            image_title.classList.add("title", "fake-input");
+            image_title.contentEditable = "true";
+            image_title.placeholder = "Description";
+            image_container.appendChild(image_title);
+
+            const image_link = document.createElement("a");
+            image_link.classList.add("image");
+            const image = document.createElement("img");
+            image.src = dataUrl;
+            image_link.appendChild(image);
+            image_container.appendChild(image_link);
+
+            const image_description = document.createElement("p");
+            image_description.classList.add("description", "fake-input");
+            image_description.contentEditable = "true";
+            image_description.placeholder = "Description";
+            image_description.dataset["multiline"] = "true";
+            image_container.appendChild(image_description);
+
+            results.appendChild(image_container);
 
             const data = new FormData();
             data.append("file", file, file.name);
 
             postData("/upload/", data).then((json) => {
                 if (json.success) {
-                    node.querySelector("a.image").href = "/" + json.id;
-                    node.querySelector("a.image img").src = "/" + json.id;
+                    image_link.href = "/" + json.id;
+                    image.src = "/" + json.id;
                 } else {
-                    node.insertBefore(
-                        <div className="alert error">{JSON.stringify(json.errors)}</div>,
-                        node.querySelector(".description")
-                    )
+                    const image_error = document.createElement("div");
+                    image_error.classList.add("alert", "error");
+                    image_error.innerText = JSON.stringify(json.errors);
+                    image_container.insertBefore(image_error, image_description);
                 }
 
                 console.log(json);
@@ -46,4 +62,4 @@ element.addEventListener("change", () => {
         });
         reader.readAsDataURL(file);
     }
-})
+});
