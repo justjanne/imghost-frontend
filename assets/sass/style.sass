@@ -155,7 +155,7 @@ form.upload
     border: none
     width: 100%
     box-sizing: border-box
-    &:not(input):not(textarea):empty
+    &:not(.fake-input):empty
       display: none
       & + .image
         border-top-left-radius: 4px
@@ -178,7 +178,7 @@ form.upload
     box-sizing: border-box
     font-family: 'Lato', sans-serif
     resize: vertical
-    &:not(input):not(textarea):empty
+    &:not(.fake-input):empty
       display: none
 
 .fake-input[contenteditable]:empty:before
