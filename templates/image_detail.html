@@ -34,20 +34,32 @@
             </form>
         </div>
     {{end}}
-
         <div class="url">
-            <input id="url-field" type="text" value="https://i.k8r.eu/{{.Image.Id}}">
-            <button id="copy-url">Copy</button>
+            <p>Detail Page</p>
+            <div>
+                <input id="url_full" type="text" value="https://i.k8r.eu/i/{{.Image.Id}}">
+                <button class="copy" data-target="#url_full">Copy</button>
+            </div>
+        </div>
+        <div class="url">
+            <p>Direct Link</p>
+            <div>
+                <input id="url_direct" type="text" value="https://i.k8r.eu/{{.Image.Id}}">
+                <button class="copy" data-target="#url_direct">Copy</button>
+            </div>
         </div>
     </div>
 </div>
 <script>
-    const urlCopyButton = document.getElementById("copy-url");
-    const urlField = document.getElementById("url-field");
-    urlCopyButton.addEventListener("click", () => {
-        urlField.select();
-        document.execCommand("Copy");
-    })
+    Array.prototype.slice.call(document.querySelectorAll("button.copy[data-target]")).forEach((button) => {
+        const target = document.querySelector(button.dataset["target"]);
+        if (target) {
+            button.addEventListener("click", () => {
+                target.select();
+                document.execCommand("Copy");
+            })
+        }
+    });
 </script>
 {{if .IsMine}}
 <script>
