@@ -8,11 +8,11 @@
     </div>
 {{else}}
     <div class="alert error">
-        {{if .Id}}
+    {{if .Id}}
         <h2>Upload of {{.Id}} failed.</h2>
-        {{else}}
+    {{else}}
         <h2>Upload failed.</h2>
-        {{end}}
+    {{end}}
     {{range .Errors}}
         <pre>{{.}}</pre>
     {{end}}
@@ -20,7 +20,8 @@
 {{end}}
 {{end}}
     <form class="upload" action="/upload/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/><br>
+        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov"
+               multiple/><br>
         <input type="submit"/>
     </form>
 </div>

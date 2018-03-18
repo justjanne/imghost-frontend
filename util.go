@@ -7,12 +7,6 @@ import (
 	"time"
 	"database/sql"
 	"github.com/go-redis/redis"
-	"encoding/base64"
-	"io"
-	"mime/multipart"
-	"path/filepath"
-	"os"
-	"crypto/rand"
 )
 
 type UserInfo struct {
@@ -30,18 +24,18 @@ type PageContext struct {
 }
 
 type AlbumImage struct {
-	Id string
-	Title string
+	Id          string
+	Title       string
 	Description string
-	Position int
+	Position    int
 }
 
 type Album struct {
-	Id string
-	Title string
+	Id          string
+	Title       string
 	Description string
-	CreatedAt time.Time
-	Images []AlbumImage
+	CreatedAt   time.Time
+	Images      []AlbumImage
 }
 
 func parseUser(r *http.Request) UserInfo {

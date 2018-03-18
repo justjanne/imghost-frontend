@@ -3,13 +3,12 @@ package main
 import (
 	"net/http"
 	"fmt"
-	"time"
 	"path"
 )
 
 type AlbumDetailData struct {
 	User   UserInfo
-	Album Album
+	Album  Album
 	IsMine bool
 }
 

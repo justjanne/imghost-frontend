@@ -16,7 +16,7 @@ type Image struct {
 }
 
 type Result struct {
-	Id      string `json:"id"`
+	Id      string   `json:"id"`
 	Success bool     `json:"success"`
 	Errors  []string `json:"errors"`
 }
