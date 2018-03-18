@@ -37,17 +37,17 @@ func main() {
 		http.FileServer(http.Dir("assets")),
 	}
 
-	http.Handle("/upload/", headerWrapper(pageUpload(pageContext)))
+	http.Handle("/upload/", pageUpload(pageContext))
 
 	http.Handle("/i/", headerWrapper(http.StripPrefix("/i/", pageImageDetail(pageContext))))
 	http.Handle("/me/i/", headerWrapper(http.StripPrefix("/me/i/", pageImageDetail(pageContext))))
 
-	http.Handle("/a/", headerWrapper(http.StripPrefix("/a/", pageAlbumDetail(pageContext))))
-	http.Handle("/me/a/", headerWrapper(http.StripPrefix("/me/a/", pageAlbumDetail(pageContext))))
+	http.Handle("/a/", http.StripPrefix("/a/", pageAlbumDetail(pageContext)))
+	http.Handle("/me/a/", http.StripPrefix("/me/a/", pageAlbumDetail(pageContext)))
 
-	http.Handle("/me/images/", headerWrapper(pageImageList(pageContext)))
-	http.Handle("/assets/", headerWrapper(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets")))))
-	http.Handle("/", headerWrapper(pageIndex(pageContext)))
+	http.Handle("/me/images/", pageImageList(pageContext))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	http.Handle("/", pageIndex(pageContext))
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
