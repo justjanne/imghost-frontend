@@ -56,7 +56,6 @@ func pageImageDetail(ctx PageContext) http.Handler {
 					panic(err)
 				}
 				http.Redirect(w, r, r.URL.Path, http.StatusFound)
-				fmt.Fprintf(w, "You are being redirected to: %s\n", r.URL.Path)
 				return
 			case "delete":
 				_, err = ctx.Database.Exec("DELETE FROM images WHERE id = $1 AND owner = $2", info.Id, user.Id)
@@ -69,9 +68,7 @@ func pageImageDetail(ctx PageContext) http.Handler {
 						panic(err)
 					}
 				}
-				w.Header().Add("Location", "/me/images")
-				w.WriteHeader(http.StatusFound)
-				fmt.Fprintf(w, "You are being redirected to: %s\n", "/me/images")
+				http.Redirect(w, r, "/me/images", http.StatusFound)
 				return
 			default:
 				if err = formatTemplate(w, "image_detail.html", ImageDetailData{
