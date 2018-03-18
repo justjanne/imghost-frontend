@@ -25,6 +25,7 @@ let hasChangedEver = false;
 const currentState = () => {
     const data = new FormData(document.forms.namedItem("upload"));
     data.append("from_js", "true");
+    return data;
 };
 
 const doSave = () => {
