@@ -12,6 +12,13 @@
     </div>
 {{if .IsMine}}
     <div class="description fake-input" contenteditable="true" placeholder="Description" data-multiline>{{.Image.Description}}</div>
+    <div class="actions">
+        <form class="delete-form" method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{.Image.Id}}">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
 {{else}}
     <div class="description">{{.Image.Description}}</div>
 {{end}}
