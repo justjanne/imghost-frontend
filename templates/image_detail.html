@@ -18,11 +18,16 @@
 </form>
 {{if .IsMine}}
 <script>
-    document.querySelector(".title").addEventListener("input", (event) => {
+    const listener = (event) => {
         requestAnimationFrame(() => {
             document.title = event.target.innerText + " | i.k8r"
         })
-    })
+    };
+
+    const element = document.querySelector(".title.fake-input[contenteditable]");
+
+    element.addEventListener("input", listener);
+    element.addEventListener("keypress", listener);
 </script>
 {{end}}
 {{end}}
