@@ -39,11 +39,8 @@ func main() {
 
 	http.Handle("/upload/", pageUpload(pageContext))
 
-	http.Handle("/i/", headerWrapper(http.StripPrefix("/i/", pageImageDetail(pageContext))))
-	http.Handle("/me/i/", headerWrapper(http.StripPrefix("/me/i/", pageImageDetail(pageContext))))
-
+	http.Handle("/i/", http.StripPrefix("/i/", pageImageDetail(pageContext)))
 	http.Handle("/a/", http.StripPrefix("/a/", pageAlbumDetail(pageContext)))
-	http.Handle("/me/a/", http.StripPrefix("/me/a/", pageAlbumDetail(pageContext)))
 
 	http.Handle("/me/images/", pageImageList(pageContext))
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
