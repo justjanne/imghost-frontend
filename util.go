@@ -7,6 +7,7 @@ import (
 	"time"
 	"database/sql"
 	"github.com/go-redis/redis"
+	"strings"
 )
 
 type UserInfo struct {
@@ -49,12 +50,11 @@ type Album struct {
 }
 
 func parseUser(r *http.Request) UserInfo {
-	println(r.Header.Get("X-Auth-Roles"))
 	return UserInfo{
 		r.Header.Get("X-Auth-Subject"),
 		r.Header.Get("X-Auth-Username"),
 		r.Header.Get("X-Auth-Email"),
-		[]string{},
+		strings.Split(r.Header.Get("X-Auth-Roles"), ","),
 	}
 }
 
