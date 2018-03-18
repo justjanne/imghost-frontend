@@ -38,6 +38,10 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.Handle("/", pageIndex(pageContext))
 
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("OK"))
+	})
+
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
