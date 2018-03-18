@@ -49,7 +49,7 @@ element.addEventListener("change", () => {
             const image_description = document.createElement("p");
             image_description.classList.add("description", "fake-input");
             image_description.contentEditable = "true";
-            image_title.setAttribute("placeholder", "Description");
+            image_description.setAttribute("placeholder", "Description");
             image_description.dataset["multiline"] = "true";
             image_container.appendChild(image_description);
 
