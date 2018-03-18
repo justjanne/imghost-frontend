@@ -14,6 +14,9 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4)
       padding: 8px
       margin-bottom: 8px
+      @media (max-width: 1024px)
+        padding: 16px
+        margin-bottom: 32px
       p
         color: #ffffff
       div
@@ -48,6 +51,8 @@
       display: flex
       flex-direction: row
       margin-bottom: 8px
+      @media (max-width: 1024px)
+        margin-bottom: 32px
       .delete-form, .update-form
         display: flex
         flex-grow: 1
@@ -64,9 +69,15 @@
           margin: 8px
           flex-grow: 1
           cursor: pointer
+          @media (max-width: 1024px)
+            margin: 16px
           &:hover, &:focus
             background: #FFD54F
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+    @media (max-width: 1024px)
+      width: auto
+      margin-left: 0
+      margin-top: 32px
   .detail
     max-width: 640px
     width: 100%
