@@ -2,13 +2,15 @@
 <nav>
     <ul>
         <li class="title"><a href="/">i.k8r</a></li>
-    {{if .Id}}
+    {{if .hasRole "imghost:user" }}
         <li><a href="/upload">Upload</a></li>
     {{end}}
         <li class="spacer"></li>
-    {{if .Id}}
+    {{if .hasRole "imghost:user" }}
         <li><a href="/me/images">My Images</a></li>
         <li><a href="/me/albums">My Albums</a></li>
+        <li class="me"><a href="https://accounts.kuschku.de/profile">{{.Name}}</a></li>
+    {{else if .Id }}
         <li class="me"><a href="https://accounts.kuschku.de/profile">{{.Name}}</a></li>
     {{else}}
         <li><a href="/me/images">Login</a></li>

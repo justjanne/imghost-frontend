@@ -13,6 +13,16 @@ type UserInfo struct {
 	Id    string
 	Name  string
 	Email string
+	Roles []string
+}
+
+func (info *UserInfo) hasRole(role string) bool {
+	for _, r := range info.Roles {
+		if r == role {
+			return true
+		}
+	}
+	return false
 }
 
 type PageContext struct {
@@ -43,6 +53,7 @@ func parseUser(r *http.Request) UserInfo {
 		r.Header.Get("X-Auth-Subject"),
 		r.Header.Get("X-Auth-Username"),
 		r.Header.Get("X-Auth-Email"),
+		r.Header.Get("X-Auth-Roles"),
 	}
 }
 
