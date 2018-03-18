@@ -83,6 +83,7 @@ window.addEventListener("beforeunload", (e) => {
     const state = currentState();
     if (lastSaved !== null && lastSaved !== state) {
         const message = "Your changes have not been saved. Are you sure you want to leave?";
+        e.preventDefault();
         e.returnValue = message;
         return message;
     }
