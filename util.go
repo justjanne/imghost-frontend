@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"github.com/go-redis/redis"
 	"strings"
+	"encoding/json"
 )
 
 type UserInfo struct {
@@ -56,6 +57,20 @@ func parseUser(r *http.Request) UserInfo {
 		r.Header.Get("X-Auth-Email"),
 		strings.Split(r.Header.Get("X-Auth-Roles"), ","),
 	}
+}
+
+func returnJson(w http.ResponseWriter, data interface{}) error {
+	marshalled, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	if _, err := w.Write(marshalled); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func formatTemplate(w http.ResponseWriter, templateName string, data interface{}) error {

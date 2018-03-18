@@ -84,13 +84,10 @@ func pageUpload(ctx PageContext) http.Handler {
 
 			err := r.ParseMultipartForm(32 << 20)
 			if err != nil {
-				if err = formatTemplate(w, "upload.html", UploadData{
-					user,
-					[]Result{{
-						Success: false,
-						Errors:  []string{err.Error()},
-					}},
-				}); err != nil {
+				if err = returnJson(w, []Result{{
+					Success: false,
+					Errors:  []string{err.Error()},
+				}}); err != nil {
 					panic(err)
 				}
 			}
@@ -103,26 +100,20 @@ func pageUpload(ctx PageContext) http.Handler {
 			for _, header := range files {
 				file, err := header.Open()
 				if err != nil {
-					if err = formatTemplate(w, "upload.html", UploadData{
-						user,
-						[]Result{{
-							Success: false,
-							Errors:  []string{err.Error()},
-						}},
-					}); err != nil {
+					if err = returnJson(w, []Result{{
+						Success: false,
+						Errors:  []string{err.Error()},
+					}}); err != nil {
 						panic(err)
 					}
 					return
 				}
 				image, err := createImage(ctx.Config, file, header)
 				if err != nil {
-					if err = formatTemplate(w, "upload.html", UploadData{
-						user,
-						[]Result{{
-							Success: false,
-							Errors:  []string{err.Error()},
-						}},
-					}); err != nil {
+					if err = returnJson(w, []Result{{
+						Success: false,
+						Errors:  []string{err.Error()},
+					}}); err != nil {
 						panic(err)
 					}
 					return
@@ -142,13 +133,10 @@ func pageUpload(ctx PageContext) http.Handler {
 
 				data, err := json.Marshal(image)
 				if err != nil {
-					if err = formatTemplate(w, "upload.html", UploadData{
-						user,
-						[]Result{{
-							Success: false,
-							Errors:  []string{err.Error()},
-						}},
-					}); err != nil {
+					if err = returnJson(w, []Result{{
+						Success: false,
+						Errors:  []string{err.Error()},
+					}}); err != nil {
 						panic(err)
 					}
 					return
@@ -165,13 +153,10 @@ func pageUpload(ctx PageContext) http.Handler {
 			for len(waiting) != 0 {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
-					if err = formatTemplate(w, "upload.html", UploadData{
-						user,
-						[]Result{{
-							Success: false,
-							Errors:  []string{err.Error()},
-						}},
-					}); err != nil {
+					if err = returnJson(w, []Result{{
+						Success: false,
+						Errors:  []string{err.Error()},
+					}}); err != nil {
 						panic(err)
 					}
 					return
@@ -180,13 +165,10 @@ func pageUpload(ctx PageContext) http.Handler {
 				result := Result{}
 				err = json.Unmarshal([]byte(message.Payload), &result)
 				if err != nil {
-					if err = formatTemplate(w, "upload.html", UploadData{
-						user,
-						[]Result{{
-							Success: false,
-							Errors:  []string{err.Error()},
-						}},
-					}); err != nil {
+					if err = returnJson(w, []Result{{
+						Success: false,
+						Errors:  []string{err.Error()},
+					}}); err != nil {
 						panic(err)
 					}
 					return
@@ -201,10 +183,7 @@ func pageUpload(ctx PageContext) http.Handler {
 				}
 			}
 
-			if err = formatTemplate(w, "upload.html", UploadData{
-				user,
-				results,
-			}); err != nil {
+			if err = returnJson(w, results); err != nil {
 				panic(err)
 			}
 			return
