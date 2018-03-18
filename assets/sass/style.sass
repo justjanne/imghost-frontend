@@ -220,12 +220,10 @@ form.upload
     box-sizing: border-box
     font-family: 'Lato', sans-serif
     resize: vertical
+    white-space: pre-line
     &:not(.fake-input):empty
       display: none
 
 .fake-input[contenteditable]:empty:before
   opacity: 0.4
   content: attr(placeholder)
-
-.fake-input[contenteditable][data-multiline]
-  white-space: pre-line
