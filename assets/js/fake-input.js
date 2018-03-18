@@ -17,7 +17,7 @@ const changeListener = (event) => {
 
 Array.prototype.slice.call(document.querySelectorAll(".fake-input[contenteditable]")).forEach(elem => {
     elem.addEventListener("input", changeListener);
-    if (!elem.dataset["multiline"]) {
+    if (elem.dataset["multiline"] === undefined) {
         elem.addEventListener("keypress", keyListener);
     }
 });
