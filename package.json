@@ -1,9 +1,11 @@
 {
   "scripts": {
     "sass": "node_modules/node-sass/bin/node-sass --output-style compressed assets/sass -o assets/css",
-    "build": "npm run sass"
+    "jsx": "node_modules/nativejsx/bin/nativejsx assets/js/*.jsx",
+    "build": "npm run sass && npm run jsx"
   },
   "devDependencies": {
+    "nativejsx": "^4.3.0",
     "node-sass": "^4.7.2"
   }
 }

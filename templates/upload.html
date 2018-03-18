@@ -27,44 +27,5 @@
     </form>
     <div class="uploading images"></div>
 </div>
-<script>
-    function postData(url, data) {
-        return fetch(url, {
-            body: data,
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            method: 'POST',
-            mode: 'cors',
-            redirect: 'follow'
-        }).then(response => response.json())
-    }
-
-    const form = document.querySelector("form.upload");
-    const element = document.querySelector("form.upload input[type=file]");
-    const results = document.querySelector(".uploading.images");
-    element.addEventListener("change", () => {
-        for (let file of element.files) {
-            const reader = new FileReader();
-            reader.addEventListener("load", (e) => {
-                const node = document.createElement("div");
-                node.classList.add("uploading");
-                node.classList.add("image");
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                node.appendChild(img);
-                results.appendChild(node);
-
-                const data = new FormData();
-                data.append("file", file, file.name);
-
-                postData("/upload/", data).then((json) => {
-                    const text = document.createElement("pre");
-                    text.innerText = JSON.stringify(json);
-                    node.appendChild(text);
-                });
-            });
-            reader.readAsDataURL(file);
-        }
-    })
-</script>
+<script src="/assets/js/page_upload.js"></script>
 {{end}}
