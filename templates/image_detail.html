@@ -18,6 +18,7 @@
     {{end}}
     </div>
     <div class="sidebar">
+    {{if .IsMine}}
         <div class="actions">
             <form class="delete-form" method="post">
                 <input type="hidden" name="action" value="delete">
@@ -32,6 +33,7 @@
                 <input type="submit" value="Save">
             </form>
         </div>
+    {{end}}
 
         <div class="url">
             <input id="url-field" type="text" value="https://i.k8r.eu/{{.Image.Id}}">
@@ -39,6 +41,14 @@
         </div>
     </div>
 </div>
+<script>
+    const urlCopyButton = document.getElementById("copy-url");
+    const urlField = document.getElementById("url-field");
+    urlCopyButton.addEventListener("click", () => {
+        urlField.select();
+        document.execCommand("Copy");
+    })
+</script>
 {{if .IsMine}}
 <script>
     const fakeTitle = document.querySelector(".title.fake-input[contenteditable]");
@@ -76,13 +86,6 @@
 
     fakeDescription.addEventListener("input", fakeDescriptionListener);
     fakeDescription.addEventListener("keypress", fakeDescriptionListener);
-
-    const urlCopyButton = document.getElementById("copy-url");
-    const urlField = document.getElementById("url-field");
-    urlCopyButton.addEventListener("click", () => {
-        urlField.select();
-        document.execCommand("Copy");
-    })
 </script>
 {{end}}
 {{end}}
