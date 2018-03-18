@@ -6,36 +6,57 @@ function postData(url, data) {
         method: 'POST',
         mode: 'cors',
         redirect: 'follow'
-    }).then(response => response.json());
+    }).then(response => response.json())
 }
-const form = document.querySelector('form.upload');
-const element = document.querySelector('form.upload input[type=file]');
-const results = document.querySelector('.uploading.images');
-element.addEventListener('change', () => {
+
+const form = document.querySelector("form.upload");
+const element = document.querySelector("form.upload input[type=file]");
+const results = document.querySelector(".uploading.images");
+element.addEventListener("change", () => {
     for (let file of element.files) {
         const reader = new FileReader();
-        reader.addEventListener('load', e => {
+        reader.addEventListener("load", (e) => {
             const dataUrl = e.target.result;
-            const node = function () {
-                var $$a = document.createElement('div');
-                $$a.setAttribute('class', 'uploading image');
-                return $$a;
-            }.call(this);
-            results.appendChild(node);
+
+            const image_container = document.createElement("div");
+            image_container.classList.add("uploading", "image");
+
+            const image_title = document.createElement("h2");
+            image_title.classList.add("title", "fake-input");
+            image_title.contentEditable = "true";
+            image_title.placeholder = "Description";
+            image_container.appendChild(image_title);
+
+            const image_link = document.createElement("a");
+            image_link.classList.add("image");
+            const image = document.createElement("img");
+            image.src = dataUrl;
+            image_link.appendChild(image);
+            image_container.appendChild(image_link);
+
+            const image_description = document.createElement("p");
+            image_description.classList.add("description", "fake-input");
+            image_description.contentEditable = "true";
+            image_description.placeholder = "Description";
+            image_description.dataset["multiline"] = "true";
+            image_container.appendChild(image_description);
+
+            results.appendChild(image_container);
+
             const data = new FormData();
-            data.append('file', file, file.name);
-            postData('/upload/', data).then(json => {
+            data.append("file", file, file.name);
+
+            postData("/upload/", data).then((json) => {
                 if (json.success) {
-                    node.querySelector('a.image').href = '/' + json.id;
-                    node.querySelector('a.image img').src = '/' + json.id;
+                    image_link.href = "/" + json.id;
+                    image.src = "/" + json.id;
                 } else {
-                    node.insertBefore(function () {
-                        var $$b = document.createElement('div');
-                        $$b.setAttribute('class', 'alert error');
-                        $$b.appendChildren(JSON.stringify(json.errors));
-                        return $$b;
-                    }.call(this), node.querySelector('.description'));
+                    const image_error = document.createElement("div");
+                    image_error.classList.add("alert", "error");
+                    image_error.innerText = JSON.stringify(json.errors);
+                    image_container.insertBefore(image_error, image_description);
                 }
+
                 console.log(json);
             });
         });
