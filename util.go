@@ -16,7 +16,7 @@ type UserInfo struct {
 	Roles []string
 }
 
-func (info *UserInfo) HasRole(role string) bool {
+func (info UserInfo) HasRole(role string) bool {
 	for _, r := range info.Roles {
 		if r == role {
 			return true
