@@ -33,7 +33,7 @@ const formDataToJson = (data) => {
     for (let key of data.keys()) {
         result[key] = data.getAll(key);
     }
-    return data;
+    return result;
 };
 
 const doSave = () => {
