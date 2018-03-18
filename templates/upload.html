@@ -45,6 +45,7 @@
                 node.appendChild(img);
                 results.appendChild(node);
                 fetch("/upload", {
+                    method: "POST",
                     credentials: "same-origin"
                 }).then((response) => {
                     return response.json()
