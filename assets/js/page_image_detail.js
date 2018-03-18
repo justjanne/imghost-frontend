@@ -90,4 +90,4 @@ window.addEventListener("beforeunload", (e) => {
         e.returnValue = message;
         return message;
     }
-};
+});
