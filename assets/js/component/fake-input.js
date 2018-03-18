@@ -8,7 +8,7 @@ const changeListener = (event) => {
     requestAnimationFrame(() => {
         const element = event.target;
 
-        element.innerText = element.innerText.replace(/\n *$/, "");
+        element.innerText = element.innerText.replace(/^ *\n *$/, "");
     })
 };
 
@@ -19,6 +19,7 @@ function initFakeInput() {
             elem.addEventListener("keypress", keyListener);
         }
         elem.dataset["bound_fake_input"] = "true";
+        element.innerText = element.innerText.replace(/\n *$/, "");
     });
 }
 
