@@ -37,6 +37,7 @@ element.addEventListener("change", () => {
             image_progress_indeterminate.classList.add("indeterminate");
 
             image_progress.appendChild(image_progress_indeterminate);
+            image_container.appendChild(image_progress);
 
             const image_link = document.createElement("a");
             image_link.classList.add("image");
