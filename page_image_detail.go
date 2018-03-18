@@ -69,7 +69,8 @@ func pageImageDetail(ctx PageContext) http.Handler {
 						panic(err)
 					}
 				}
-				http.Redirect(w, r, "/me/images", http.StatusFound)
+				w.Header().Add("Location", "/me/images")
+				w.WriteHeader(http.StatusFound)
 				fmt.Fprintf(w, "You are being redirected to: %s\n", "/me/images")
 				return
 			default:
