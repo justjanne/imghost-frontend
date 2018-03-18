@@ -92,65 +92,50 @@ func pageUpload(ctx PageContext) http.Handler {
 				}
 			}
 
-			var images []Image
-			var ids []string
-
-			m := r.MultipartForm
-			files := m.File["file"]
-			for _, header := range files {
-				file, err := header.Open()
-				if err != nil {
-					if err = returnJson(w, []Result{{
-						Success: false,
-						Errors:  []string{err.Error()},
-					}}); err != nil {
-						panic(err)
-					}
-					return
+			file, header, err := r.FormFile("file")
+			if err != nil {
+				if err = returnJson(w, []Result{{
+					Success: false,
+					Errors:  []string{err.Error()},
+				}}); err != nil {
+					panic(err)
 				}
-				image, err := createImage(ctx.Config, file, header)
-				if err != nil {
-					if err = returnJson(w, []Result{{
-						Success: false,
-						Errors:  []string{err.Error()},
-					}}); err != nil {
-						panic(err)
-					}
-					return
+				return
+			}
+			image, err := createImage(ctx.Config, file, header)
+			if err != nil {
+				if err = returnJson(w, []Result{{
+					Success: false,
+					Errors:  []string{err.Error()},
+				}}); err != nil {
+					panic(err)
 				}
-
-				images = append(images, image)
-				ids = append(ids, image.Id)
+				return
 			}
 
 			pubsub := ctx.Redis.Subscribe(ctx.Config.ResultChannel)
-			waiting := make(map[string]bool)
-			for _, image := range images {
-				_, err = ctx.Database.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
-				if err != nil {
-					panic(err)
-				}
-
-				data, err := json.Marshal(image)
-				if err != nil {
-					if err = returnJson(w, []Result{{
-						Success: false,
-						Errors:  []string{err.Error()},
-					}}); err != nil {
-						panic(err)
-					}
-					return
-				}
-
-				fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
-				ctx.Redis.RPush(fmt.Sprintf("queue:%s", ctx.Config.ImageQueue), data)
-				fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
-
-				waiting[image.Id] = true
+			_, err = ctx.Database.Exec("INSERT INTO images (id, owner, created_at, original_name, type) VALUES ($1, $2, $3, $4, $5)", image.Id, user.Id, image.CreatedAt, image.OriginalName, image.MimeType)
+			if err != nil {
+				panic(err)
 			}
 
-			var results []Result
-			for len(waiting) != 0 {
+			data, err := json.Marshal(image)
+			if err != nil {
+				if err = returnJson(w, []Result{{
+					Success: false,
+					Errors:  []string{err.Error()},
+				}}); err != nil {
+					panic(err)
+				}
+				return
+			}
+
+			fmt.Printf("Created task %s at %d\n", image.Id, time.Now().Unix())
+			ctx.Redis.RPush(fmt.Sprintf("queue:%s", ctx.Config.ImageQueue), data)
+			fmt.Printf("Submitted task %s at %d\n", image.Id, time.Now().Unix())
+
+			waiting := true
+			for waiting {
 				message, err := pubsub.ReceiveMessage()
 				if err != nil {
 					if err = returnJson(w, []Result{{
@@ -176,15 +161,13 @@ func pageUpload(ctx PageContext) http.Handler {
 
 				fmt.Printf("Returned task %s at %d\n", result.Id, time.Now().Unix())
 
-				if _, ok := waiting[result.Id]; ok {
-					delete(waiting, result.Id)
+				if result.Id == image.Id {
+					waiting = false
 
-					results = append(results, result)
+					if err = returnJson(w, result); err != nil {
+						panic(err)
+					}
 				}
-			}
-
-			if err = returnJson(w, results); err != nil {
-				panic(err)
 			}
 			return
 		} else {

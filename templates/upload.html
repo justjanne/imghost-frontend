@@ -30,6 +30,17 @@
     <div class="uploading images"></div>
 </div>
 <script>
+    function postData(url, data) {
+        return fetch(url, {
+            body: data,
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            method: 'POST',
+            mode: 'cors',
+            redirect: 'follow'
+        }).then(response => response.json())
+    }
+
     const form = document.querySelector("form.upload");
     const element = document.querySelector("form.upload input[type=file]");
     const results = document.querySelector(".uploading.images");
@@ -46,15 +57,9 @@
                 results.appendChild(node);
 
                 const data = new FormData();
-                data.append("file", file);
+                data.append("file", file, file.name);
 
-                fetch("/upload", {
-                    method: "POST",
-                    credentials: "same-origin",
-                    body: data
-                }).then((response) => {
-                    return response.json()
-                }).then((json) => {
+                postData("/upload/", data).then((json) => {
                     const text = document.createElement("pre");
                     text.innerText = JSON.stringify(json);
                     node.appendChild(text);
