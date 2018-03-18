@@ -5,7 +5,6 @@ import (
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 	"net/http"
-	"fmt"
 )
 
 func main() {
