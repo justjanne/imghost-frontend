@@ -15,12 +15,12 @@ const changeListener = (event) => {
 };
 
 function initFakeInput() {
-    Array.prototype.slice.call(document.querySelectorAll(".fake-input[contenteditable]:not([bound-fake-input])")).forEach(elem => {
+    Array.prototype.slice.call(document.querySelectorAll(".fake-input[contenteditable]:not([data-bound_fake_input])")).forEach(elem => {
         elem.addEventListener("input", changeListener);
         if (elem.dataset["multiline"] === undefined) {
             elem.addEventListener("keypress", keyListener);
         }
-        elem.dataset["bound-fake-input"] = "true";
+        elem.dataset["bound_fake_input"] = "true";
     });
 }
 

@@ -53,8 +53,6 @@
         top: 0
         bottom: 0
         opacity: 0
-    &.submitted
-      display: none
   .uploading.images
     display: flex
     flex-direction: row
@@ -172,5 +170,7 @@
     .fake-input[contenteditable]:empty:before
       opacity: 0.4
       content: attr(placeholder)
-  form.upload:not(.submitted)+.uploading.images
+  &.submitted form.upload
+    display: none
+  &:not(.submitted) .uploading.images
     display: none

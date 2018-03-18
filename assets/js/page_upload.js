@@ -9,11 +9,12 @@ function postData(url, data) {
     }).then(response => response.json())
 }
 
+const page = document.querySelector(".page.upload");
 const form = document.querySelector("form.upload");
 const element = document.querySelector("form.upload input[type=file]");
 const results = document.querySelector(".uploading.images");
 element.addEventListener("change", () => {
-    form.classList.add("submitted");
+    page.classList.add("submitted");
     for (let file of element.files) {
         const reader = new FileReader();
         reader.addEventListener("load", (e) => {

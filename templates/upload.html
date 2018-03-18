@@ -1,30 +1,14 @@
 {{define "title"}}Upload | i.k8r{{end}}
 {{define "content"}}
-<div class="page upload container centered">
-{{range .Results}}
-{{if .Success}}
-    <div class="alert success">
-        <h2>Upload of {{.Id}} finished. <a href="/{{.Id}}">View</a>.</h2>
+<div class="page upload">
+    <div class="container centered">
+        <form class="upload" action="/upload/" method="POST" enctype="multipart/form-data">
+            <label>
+                <span class="text">Select Files</span>
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
+            </label>
+        </form>
     </div>
-{{else}}
-    <div class="alert error">
-    {{if .Id}}
-        <h2>Upload of {{.Id}} failed.</h2>
-    {{else}}
-        <h2>Upload failed.</h2>
-    {{end}}
-    {{range .Errors}}
-        <pre>{{.}}</pre>
-    {{end}}
-    </div>
-{{end}}
-{{end}}
-    <form class="upload" action="/upload/" method="POST" enctype="multipart/form-data">
-        <label>
-            <span class="text">Select Files</span>
-            <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
-        </label>
-    </form>
     <div class="uploading images">
         <div class="sidebar">
             <div class="url">
