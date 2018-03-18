@@ -20,6 +20,7 @@ const updateForm = document.querySelector(".update-form");
 
 let lastTimeOut = null;
 let lastSaved = null;
+let hasChangedEver = false;
 
 const currentState = () => {
     const data = new FormData(document.forms.namedItem("upload"));
@@ -39,6 +40,7 @@ const scheduleSave = () => {
     if (lastTimeOut !== null) {
         clearTimeout(lastTimeOut);
     }
+    hasChangedEver = true;
     lastTimeOut = setTimeout(doSave, 300)
 };
 
@@ -47,6 +49,7 @@ const fakeTitleListener = (event) => {
         document.title = event.target.innerText + " | i.k8r";
         actualTitle.value = fakeTitle.innerText;
     });
+    hasChangedEver = true;
     scheduleSave();
 
 };
@@ -81,7 +84,7 @@ save.addEventListener("click", (e) => {
 
 window.addEventListener("beforeunload", (e) => {
     const state = currentState();
-    if (lastSaved !== null && lastSaved !== state) {
+    if (hasChangedEver && lastSaved !== state) {
         const message = "Your changes have not been saved. Are you sure you want to leave?";
         e.preventDefault();
         e.returnValue = message;
