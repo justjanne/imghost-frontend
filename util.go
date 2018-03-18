@@ -49,11 +49,12 @@ type Album struct {
 }
 
 func parseUser(r *http.Request) UserInfo {
+	println(r.Header.Get("X-Auth-Roles"))
 	return UserInfo{
 		r.Header.Get("X-Auth-Subject"),
 		r.Header.Get("X-Auth-Username"),
 		r.Header.Get("X-Auth-Email"),
-		r.Header.Get("X-Auth-Roles"),
+		[]string{},
 	}
 }
 
