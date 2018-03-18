@@ -8,7 +8,7 @@ const changeListener = (event) => {
     requestAnimationFrame(() => {
         const element = event.target;
 
-        if (element.innerText === "\n") {
+        if (element.innerText === "\n" || element.innerHTML === "\n") {
             element.innerText = "";
         }
     })
