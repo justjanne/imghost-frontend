@@ -8,7 +8,7 @@ const changeListener = (event) => {
     requestAnimationFrame(() => {
         const element = event.target;
 
-        element.innerText = element.innerText.replace(/^ *\n *$/, "");
+        element.innerText = element.innerText.replace(/^\n$/, "");
     })
 };
 
