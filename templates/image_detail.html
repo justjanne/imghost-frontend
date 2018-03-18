@@ -51,13 +51,19 @@
 
     };
 
+    fakeDescription.innerHTML = "";
+    actualDescription.value.split("\n").forEach((line) => {
+        const textNode = document.createTextNode(line);
+        const brNode = document.createElement("br");
+        fakeDescription.appendChild(textNode);
+        fakeDescription.appendChild(brNode)
+    });
+
     fakeTitle.addEventListener("input", fakeTitleListener);
     fakeTitle.addEventListener("keypress", fakeTitleListener);
 
     fakeDescription.addEventListener("input", fakeDescriptionListener);
     fakeDescription.addEventListener("keypress", fakeDescriptionListener);
-
-    fakeDescription.innerHTML = fakeDescription.innerText.replace("\n", "<br>")
 </script>
 {{end}}
 {{end}}
