@@ -27,7 +27,7 @@ element.addEventListener("change", () => {
             const image_title = document.createElement("h2");
             image_title.classList.add("title", "fake-input");
             image_title.contentEditable = "true";
-            image_title.placeholder = "Description";
+            image_title.setAttribute("placeholder", "Title");
             image_container.appendChild(image_title);
 
             const image_progress = document.createElement("div");
@@ -49,7 +49,7 @@ element.addEventListener("change", () => {
             const image_description = document.createElement("p");
             image_description.classList.add("description", "fake-input");
             image_description.contentEditable = "true";
-            image_description.placeholder = "Description";
+            image_title.setAttribute("placeholder", "Description");
             image_description.dataset["multiline"] = "true";
             image_container.appendChild(image_description);
 
