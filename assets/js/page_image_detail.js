@@ -28,12 +28,20 @@ const currentState = () => {
     return data;
 };
 
+const formDataToJson = (data) => {
+    const result = {};
+    for (let key of data.keys()) {
+        result[key] = data.getAll(key);
+    }
+    return data;
+};
+
 const doSave = () => {
     const data = currentState();
     save.value = "Saving…";
     postData(location.href, data).then((json) => {
         save.value = "Saved";
-        lastSaved = data;
+        lastSaved = formDataToJson(data);
     })
 };
 
@@ -84,7 +92,7 @@ save.addEventListener("click", (e) => {
 });
 
 window.addEventListener("beforeunload", (e) => {
-    const state = currentState();
+    const state = formDataToJson(currentState());
     if (hasChangedEver && lastSaved !== state) {
         const message = "Your changes have not been saved. Are you sure you want to leave?";
         e.preventDefault();
