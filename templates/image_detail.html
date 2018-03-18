@@ -16,4 +16,13 @@
     <div class="description">{{.Image.Description}}</div>
 {{end}}
 </form>
+{{if .IsMine}}
+<script>
+    document.querySelector(".title").addEventListener("input", (event) => {
+        requestAnimationFrame(() => {
+            document.title = event.target.innerText + " | i.k8r"
+        })
+    })
+</script>
+{{end}}
 {{end}}
