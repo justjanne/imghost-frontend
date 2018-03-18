@@ -19,31 +19,18 @@ const save = document.querySelector("#save");
 const updateForm = document.querySelector(".update-form");
 
 let lastTimeOut = null;
-let lastSaved = null;
-let hasChangedEver = false;
-
-const currentState = () => {
-    const data = new FormData(document.forms.namedItem("upload"));
-    data.append("from_js", "true");
-    return data;
-};
-
-const formDataToJson = (data) => {
-    const result = {};
-    if (data != null) {
-        for (let key of data.keys()) {
-            result[key] = data.getAll(key);
-        }
-    }
-    return result;
-};
+let hasChanged = false;
+let isSaving = false;
 
 const doSave = () => {
-    const data = currentState();
+    const data = new FormData(document.forms.namedItem("upload"));
+    data.append("from_js", "true");
     save.value = "Saving…";
+    hasChanged = false;
+    isSaving = true;
     postData(location.href, data).then((json) => {
         save.value = "Saved";
-        lastSaved = formDataToJson(data);
+        isSaving = false;
     })
 };
 
@@ -51,7 +38,7 @@ const scheduleSave = () => {
     if (lastTimeOut !== null) {
         clearTimeout(lastTimeOut);
     }
-    hasChangedEver = true;
+    hasChanged = true;
     lastTimeOut = setTimeout(doSave, 300)
 };
 
@@ -60,7 +47,7 @@ const fakeTitleListener = (event) => {
         document.title = event.target.innerText + " | i.k8r";
         actualTitle.value = fakeTitle.innerText;
     });
-    hasChangedEver = true;
+    hasChanged = true;
     scheduleSave();
 
 };
@@ -94,8 +81,7 @@ save.addEventListener("click", (e) => {
 });
 
 window.addEventListener("beforeunload", (e) => {
-    const state = formDataToJson(currentState());
-    if (hasChangedEver && lastSaved !== state) {
+    if (isSaving || hasChanged) {
         const message = "Your changes have not been saved. Are you sure you want to leave?";
         e.preventDefault();
         e.returnValue = message;
