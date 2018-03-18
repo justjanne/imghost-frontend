@@ -51,13 +51,15 @@
 
     };
 
+    // Insert <br> between lines instead of \n for editing
     fakeDescription.innerHTML = "";
     actualDescription.value.split("\n").forEach((line) => {
         const textNode = document.createTextNode(line);
         const brNode = document.createElement("br");
         fakeDescription.appendChild(textNode);
-        fakeDescription.appendChild(brNode)
+        fakeDescription.appendChild(brNode);
     });
+    fakeDescription.removeChild(fakeDescription.lastChild);
 
     fakeTitle.addEventListener("input", fakeTitleListener);
     fakeTitle.addEventListener("keypress", fakeTitleListener);
