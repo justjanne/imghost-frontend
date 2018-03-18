@@ -20,8 +20,10 @@
 {{end}}
 {{end}}
     <form class="upload" action="/upload/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
-        <label for="file">Select Files</label>
+        <label>
+            <span class="text">Select Files</span>
+            <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
+        </label>
         <input type="submit" value="Upload"/>
         <p class="upload-label">Uploading…</p>
     </form>
