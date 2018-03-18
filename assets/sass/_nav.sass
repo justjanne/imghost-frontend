@@ -1,0 +1,39 @@
+nav
+  position: sticky
+  top: 0
+  background: #333333
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+  padding: 0 16px
+  ul
+    display: flex
+    max-width: 1024px
+    margin: 0 auto
+    height: 56px
+    align-items: center
+    li, li > *
+      color: #282828
+      text-decoration: none
+    li
+      display: block
+      line-height: 24px
+      &.title, &.title > *
+        font-size: 24px
+        color: #FFC107
+        font-weight: 700
+      &.spacer
+        flex-grow: 1
+      &:not(.spacer)
+        margin: 0 8px
+        &:first-child
+          margin-left: 0
+        &:last-child
+          margin-right: 0
+        &:not(.title) a
+          display: block
+          background: #FFC107
+          padding: 4px 16px
+          border-radius: 2px
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+          &:hover, &:focus
+            background: #FFD54F
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)

@@ -1,0 +1,40 @@
+.images
+  display: flex
+  max-width: 1024px
+  margin: 0 auto
+  align-items: start
+  flex-wrap: wrap
+  .image
+    padding: 8px
+    margin: 8px
+    position: relative
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+    transition: all 200ms
+    text-decoration: none
+    width: 160px
+    background: #333333
+    border-radius: 2px
+    &:hover, &:focus
+      margin-top: 4px
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4)
+    .image-container
+      display: flex
+      justify-content: center
+      align-content: center
+      justify-items: center
+      align-items: center
+      flex-direction: column
+      height: 160px
+      width: 160px
+      background: #000000
+    .info
+      display: block
+      z-index: 1
+      color: #eeeeee
+      line-height: 1.25
+      font-size: 10pt
+      padding-top: 12px
+      p
+        white-space: nowrap
+        text-overflow: ellipsis
+        overflow: hidden
