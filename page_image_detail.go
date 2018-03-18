@@ -43,13 +43,6 @@ func pageImageDetail(ctx PageContext) http.Handler {
 				panic(err)
 			}
 
-			println("Post data begin")
-			println(r.PostForm.Encode())
-			for key, value := range r.PostForm {
-				fmt.Printf("%s: %s", key, value)
-			}
-			println("Post data end")
-
 			switch r.PostFormValue("action") {
 			case "update":
 				_, err = ctx.Database.Exec(
