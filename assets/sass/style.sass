@@ -104,17 +104,32 @@ form.upload
       display: none
 
   label
+    position: relative
     display: inline-block
-    background: #FFC107
-    padding: 4px 16px
-    border-radius: 2px
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1)
-    line-height: 24px
-    color: #282828
-    cursor: pointer
+    overflow: hidden
     &:hover,&:focus
       background: #FFD54F
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+
+    span.text
+      position: relative
+      display: inline-block
+      background: #FFC107
+      padding: 4px 16px
+      border-radius: 2px
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1)
+      line-height: 24px
+      color: #282828
+      cursor: pointer
+      z-index: 1
+
+    input[type=file]
+      position: absolute
+      left: 0
+      right: 0
+      top: 0
+      bottom: 0
+      opacity: 0
 
   input[type=submit]
     display: none
