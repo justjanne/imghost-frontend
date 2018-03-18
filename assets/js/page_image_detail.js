@@ -79,9 +79,11 @@ save.addEventListener("click", (e) => {
     doSave();
 });
 
-window.onbeforeunload = () => {
+window.addEventListener("beforeunload", (e) => {
     const state = currentState();
     if (lastSaved !== null && lastSaved !== state) {
-        return "Your changes have not been saved. Are you sure you want to leave?"
+        const message = "Your changes have not been saved. Are you sure you want to leave?";
+        e.returnValue = message;
+        return message;
     }
 };
