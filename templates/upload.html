@@ -20,9 +20,18 @@
 {{end}}
 {{end}}
     <form class="upload" action="/upload/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov"
-               multiple/><br>
-        <input type="submit"/>
+        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
+        <label for="file">Select Files</label>
+        <input type="submit" value="Upload"/>
+        <p class="upload-label">Uploading…</p>
     </form>
 </div>
+<script>
+    const form = document.querySelector("form.upload");
+    const element = document.querySelector("form.upload input[type=file]");
+    element.addEventListener("change", () => {
+        form.submit();
+        form.classList.add("submitted");
+    })
+</script>
 {{end}}
