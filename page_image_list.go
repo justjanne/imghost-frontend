@@ -23,6 +23,7 @@ func pageImageList(ctx PageContext) http.Handler {
 				coalesce(type, '')
 			FROM images
 			WHERE owner = $1
+			ORDER BY created_at DESC
 			`, user.Id)
 		if err != nil {
 			panic(err)
