@@ -30,6 +30,14 @@ element.addEventListener("change", () => {
             image_title.placeholder = "Description";
             image_container.appendChild(image_title);
 
+            const image_progress = document.createElement("div");
+            image_progress.classList.add("progress");
+
+            const image_progress_indeterminate = document.createElement("div");
+            image_progress_indeterminate.classList.add("indeterminate");
+
+            image_progress.appendChild(image_progress_indeterminate);
+
             const image_link = document.createElement("a");
             image_link.classList.add("image");
             const image = document.createElement("img");
