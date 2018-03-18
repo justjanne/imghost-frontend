@@ -4,14 +4,6 @@ const keyListener = (event) => {
     }
 };
 
-const changeListener = (event) => {
-    requestAnimationFrame(() => {
-        const element = event.target;
-
-        element.innerText = element.innerText.replace(/^\n$/, "");
-    })
-};
-
 function initFakeInput() {
     Array.prototype.slice.call(document.querySelectorAll(".fake-input[contenteditable]:not([data-bound_fake_input])")).forEach(elem => {
         elem.addEventListener("input", changeListener);
