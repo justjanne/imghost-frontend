@@ -10,7 +10,7 @@
         <img src="/{{.Image.Id}}">
     </div>
 {{if .IsMine}}
-    <div class="description fake-input" contenteditable="true" placeholder="Description" data-multiline>{{.Image.Description}}</div>
+    <p class="description fake-input" contenteditable="true" placeholder="Description" data-multiline>{{.Image.Description}}</p>
     <div class="actions">
         <form class="delete-form" method="post">
             <input type="hidden" name="action" value="delete">
