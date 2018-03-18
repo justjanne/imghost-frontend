@@ -1,7 +1,6 @@
 {{define "title"}}{{.Image.Title}} | i.k8r{{end}}
 {{define "content"}}
-<form class="detail" method="post">
-    <input type="hidden" name="action" value="update">
+<div class="detail">
 {{if .IsMine}}
     <h2 class="title fake-input" contenteditable="true" placeholder="Title">{{.Image.Title}}</h2>
 {{else}}
@@ -18,23 +17,45 @@
             <input type="hidden" name="id" value="{{.Image.Id}}">
             <input type="submit" value="Delete">
         </form>
+        <form class="update-form" method="post">
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" value="{{.Image.Id}}">
+            <input type="hidden" name="title" value="{{.Image.Title}}">
+            <input type="hidden" name="description" value="{{.Image.Description}}">
+            <input type="submit" value="Save">
+        </form>
     </div>
 {{else}}
     <div class="description">{{.Image.Description}}</div>
 {{end}}
-</form>
+</div>
 {{if .IsMine}}
 <script>
-    const listener = (event) => {
+    const fakeTitle = document.querySelector(".title.fake-input[contenteditable]");
+    const fakeDescription = document.querySelector(".description.fake-input[contenteditable]");
+
+    const actualTitle = document.querySelector(".update-form input[name=title]");
+    const actualDescription = document.querySelector(".update-form input[name=description]");
+
+    const fakeTitleListener = (event) => {
         requestAnimationFrame(() => {
-            document.title = event.target.innerText + " | i.k8r"
+            document.title = event.target.innerText + " | i.k8r";
+            actualTitle.value = fakeTitle.innerText;
         })
+
+    };
+    const fakeDescriptionListener = (event) => {
+        requestAnimationFrame(() => {
+            actualDescription.value = fakeDescription.innerText;
+        })
+
     };
 
-    const element = document.querySelector(".title.fake-input[contenteditable]");
+    fakeTitle.addEventListener("input", fakeTitleListener);
+    fakeTitle.addEventListener("keypress", fakeTitleListener);
 
-    element.addEventListener("input", listener);
-    element.addEventListener("keypress", listener);
+    fakeDescription.addEventListener("input", fakeDescriptionListener);
+    fakeDescription.addEventListener("keypress", fakeDescriptionListener);
 </script>
 {{end}}
 {{end}}
