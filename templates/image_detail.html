@@ -50,17 +50,7 @@
         </div>
     </div>
 </div>
-<script>
-    Array.prototype.slice.call(document.querySelectorAll("button.copy[data-target]")).forEach((button) => {
-        const target = document.querySelector(button.dataset["target"]);
-        if (target) {
-            button.addEventListener("click", () => {
-                target.select();
-                document.execCommand("Copy");
-            })
-        }
-    });
-</script>
+<script src="/assets/js/component/copy.js"></script>
 {{if .IsMine}}
 <script src="/assets/js/page_image_detail.js"></script>
 {{end}}

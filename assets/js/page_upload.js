@@ -13,13 +13,14 @@ const form = document.querySelector("form.upload");
 const element = document.querySelector("form.upload input[type=file]");
 const results = document.querySelector(".uploading.images");
 element.addEventListener("change", () => {
+    form.classList.add("submitted");
     for (let file of element.files) {
         const reader = new FileReader();
         reader.addEventListener("load", (e) => {
             const dataUrl = e.target.result;
 
             const image_container = document.createElement("div");
-            image_container.classList.add("uploading", "image");
+            image_container.classList.add("detail", "uploading");
 
             const image_title = document.createElement("h2");
             image_title.classList.add("title", "fake-input");
@@ -42,6 +43,7 @@ element.addEventListener("change", () => {
             image_container.appendChild(image_description);
 
             results.appendChild(image_container);
+            initFakeInput();
 
             const data = new FormData();
             data.append("file", file, file.name);

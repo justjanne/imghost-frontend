@@ -25,7 +25,18 @@
             <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.webp,.mp4,.mov" multiple/>
         </label>
     </form>
-    <div class="uploading images"></div>
+    <div class="uploading images">
+        <div class="sidebar">
+            <div class="url">
+                <p>Album</p>
+                <div>
+                    <input id="url_full" type="text" value="https://i.k8r.eu/a/ERROR">
+                    <button class="copy" data-target="#url_full">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="/assets/js/page_upload.js"></script>
+<script src="/assets/js/component/copy.js"></script>
 {{end}}
