@@ -7,9 +7,9 @@
     {{else}}
         <h2 class="title">{{.Image.Title}}</h2>
     {{end}}
-        <div class="image">
+        <a class="image" href="/{{.Image.Id}}">
             <img src="/{{.Image.Id}}">
-        </div>
+        </a>
     {{if .IsMine}}
         <p class="description fake-input" contenteditable="true" placeholder="Description"
            data-multiline>{{.Image.Description}}</p>
