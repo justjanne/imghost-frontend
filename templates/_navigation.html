@@ -6,7 +6,7 @@
         <li><a href="/upload">Upload</a></li>
     {{end}}
         <li class="spacer"></li>
-    {{if .hasRole "imghost:user" }}
+    {{if .HasRole "imghost:user" }}
         <li><a href="/me/images">My Images</a></li>
         <li><a href="/me/albums">My Albums</a></li>
         <li class="me"><a href="https://accounts.kuschku.de/profile">{{.Name}}</a></li>
