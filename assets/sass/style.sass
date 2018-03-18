@@ -104,9 +104,6 @@ form.upload
     position: relative
     display: inline-block
     overflow: hidden
-    &:hover,&:focus
-      background: #FFD54F
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 
     span.text
       position: relative
@@ -119,6 +116,9 @@ form.upload
       color: #282828
       cursor: pointer
       z-index: 1
+      &:hover,&:focus
+        background: #FFD54F
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 
     input[type=file]
       position: absolute
