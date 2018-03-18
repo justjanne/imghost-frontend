@@ -8,12 +8,10 @@ const keyListener = (event) => {
 const changeListener = (event) => {
     requestAnimationFrame(() => {
         const element = event.target;
-        const selectionStart = element.selectionStart;
-        const selectionEnd = element.selectionEnd;
-        const text = element.innerText;
-        element.innerText = (text === "\n") ? "" : text;
-        element.selectionStart = selectionStart;
-        element.selectionEnd = selectionEnd;
+
+        if (element.innerText === "\n") {
+            element.innerText = "";
+        }
     })
 };
 
