@@ -8,8 +8,7 @@ const keyListener = (event) => {
 const changeListener = (event) => {
     requestAnimationFrame(() => {
         const text = event.target.innerText;
-        console.log(text);
-        event.target.innerText = text
+        event.target.innerText = (text === "\n") ? "" : text;
     })
 };
 
