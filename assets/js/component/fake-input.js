@@ -6,7 +6,6 @@ const keyListener = (event) => {
 
 function initFakeInput() {
     Array.prototype.slice.call(document.querySelectorAll(".fake-input[contenteditable]:not([data-bound_fake_input])")).forEach(elem => {
-        elem.addEventListener("input", changeListener);
         if (elem.dataset["multiline"] === undefined) {
             elem.addEventListener("keypress", keyListener);
         }
