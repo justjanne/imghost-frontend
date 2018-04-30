@@ -12,8 +12,8 @@ function postData(url, data) {
 const page = document.querySelector(".page.upload");
 const form = document.querySelector("form.upload");
 const element = document.querySelector("form.upload input[type=file]");
-const results = document.querySelector(".uploading .images");
-const sidebar = document.querySelector(".uploading .sidebar");
+const results = document.querySelector(".uploading-images .images");
+const sidebar = document.querySelector(".uploading-images .sidebar");
 element.addEventListener("change", () => {
     page.classList.add("submitted");
     for (let file of element.files) {
