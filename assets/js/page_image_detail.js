@@ -44,7 +44,12 @@ const scheduleSave = () => {
 
 const fakeTitleListener = (event) => {
     requestAnimationFrame(() => {
-        document.title = event.target.innerText + " | i.k8r";
+        const title = event.target.innerText;
+        if (title.trim() !== "") {
+            document.title = title + " | ik8r";
+        } else {
+            document.title = "Image Detail | ik8r";
+        }
         actualTitle.value = fakeTitle.innerText;
     });
     hasChanged = true;
