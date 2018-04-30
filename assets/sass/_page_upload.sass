@@ -57,41 +57,48 @@
         top: 0
         bottom: 0
         opacity: 0
-  .uploading.images
-    .detail
-      .image
-        position: relative
-        .progress
-          position: absolute
-          top: -4px
-          left: 0
-          right: 0
-          height: 4px
-          display: block
-          background-color: rgba(255, 193, 7, 0.2)
-          overflow: hidden
-          transition: opacity 400ms
-          .indeterminate
-            background-color: rgba(255, 193, 7, 0.8)
-            &::before
-              content: ''
-              position: absolute
-              background-color: inherit
-              top: 0
-              left: 0
-              bottom: 0
-              will-change: left, right
-              animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite
-            &::after
-              content: ''
-              position: absolute
-              background-color: inherit
-              top: 0
-              left: 0
-              bottom: 0
-              will-change: left, right
-              animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite
-              animation-delay: 1.125s
+  .uploading
+    display: flex
+    flex-direction: row
+    .images
+      display: flex
+      flex-direction: column
+      align-items: stretch
+      flex-grow: 1
+      .detail
+        .image
+          position: relative
+          .progress
+            position: absolute
+            top: -4px
+            left: 0
+            right: 0
+            height: 4px
+            display: block
+            background-color: rgba(255, 193, 7, 0.2)
+            overflow: hidden
+            transition: opacity 400ms
+            .indeterminate
+              background-color: rgba(255, 193, 7, 0.8)
+              &::before
+                content: ''
+                position: absolute
+                background-color: inherit
+                top: 0
+                left: 0
+                bottom: 0
+                will-change: left, right
+                animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite
+              &::after
+                content: ''
+                position: absolute
+                background-color: inherit
+                top: 0
+                left: 0
+                bottom: 0
+                will-change: left, right
+                animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite
+                animation-delay: 1.125s
       &:not(.uploading) .progress
         opacity: 0
   &.submitted .container.centered
