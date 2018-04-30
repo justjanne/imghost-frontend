@@ -55,7 +55,7 @@ element.addEventListener("change", () => {
             image_description.dataset["multiline"] = "true";
             image_container.appendChild(image_description);
 
-            results.insertBefore(image_container, sidebar);
+            results.appendChild(image_container);
             initFakeInput();
 
             const data = new FormData();
