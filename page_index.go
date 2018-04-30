@@ -18,6 +18,18 @@ func pageIndex(ctx PageContext) http.Handler {
 			}); err != nil {
 				panic(err)
 			}
+        } else if r.URL.Path == "/favicon.ico" {
+			w.Header().Set("Vary", "Accept-Encoding")
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+			ctx.AssetServer.ServeHTTP(w, r)
+        } else if r.URL.Path == "/favicon.png" {
+			w.Header().Set("Vary", "Accept-Encoding")
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+			ctx.AssetServer.ServeHTTP(w, r)
+        } else if r.URL.Path == "/favicon.svg" {
+			w.Header().Set("Vary", "Accept-Encoding")
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+			ctx.AssetServer.ServeHTTP(w, r)
 		} else {
 			w.Header().Set("Vary", "Accept-Encoding")
 			w.Header().Set("Cache-Control", "public, max-age=31536000")

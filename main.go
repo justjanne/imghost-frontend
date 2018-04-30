@@ -32,7 +32,7 @@ func main() {
 	http.Handle("/a/", http.StripPrefix("/a/", pageAlbumDetail(pageContext)))
 
 	http.Handle("/me/images/", pageImageList(pageContext))
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", pageContext.AssetServer))
 	http.Handle("/", pageIndex(pageContext))
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
