@@ -12,8 +12,8 @@ RUN CGO_ENABLED=false go build -a app .
 FROM node:alpine as asset_builder
 WORKDIR /app
 COPY package* /app/
-COPY assets /app/assets
 RUN npm install
+COPY assets /app/assets
 RUN npm run build
 
 FROM alpine:3.7
