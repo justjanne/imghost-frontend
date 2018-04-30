@@ -19,6 +19,8 @@ func pageIndex(ctx PageContext) http.Handler {
 				panic(err)
 			}
 		} else {
+			w.Header().Set("Vary", "Accept-Encoding")
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
 			ctx.Images.ServeHTTP(w, r)
 		}
 	})
