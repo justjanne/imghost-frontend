@@ -7,7 +7,7 @@
     {{else}}
         <h2 class="title">{{.Image.Title}}</h2>
     {{end}}
-        <a class="image" href="/{{.Image.Id}}">
+        <a class="image" href="/{{.Image.Id}}.png">
             <img src="/{{.Image.Id}}.png">
         </a>
     {{if .IsMine}}
@@ -44,7 +44,7 @@
         <div class="url">
             <p>Direct Link</p>
             <div>
-                <input id="url_direct" type="text" value="https://i.k8r.eu/{{.Image.Id}}">
+                <input id="url_direct" type="text" value="https://i.k8r.eu/{{.Image.Id}}.png">
                 <button class="copy" data-target="#url_direct">Copy</button>
             </div>
         </div>

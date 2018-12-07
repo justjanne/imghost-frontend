@@ -64,8 +64,8 @@ element.addEventListener("change", () => {
             postData("/upload/", data).then((json) => {
                 image_container.classList.remove("uploading");
                 if (json.success) {
-                    image_link.href = "/" + json.id;
-                    image.src = "/" + json.id;
+                    image_link.href = "/" + json.id + ".png";
+                    image.src = "/" + json.id + ".png";
                 } else {
                     const image_error = document.createElement("div");
                     image_error.classList.add("alert", "error");
