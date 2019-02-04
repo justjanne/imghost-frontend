@@ -1,15 +1,14 @@
 hash: 5a6dada4b3dcf477cce39070c5471b9d2c4eb6f84580715e945193716626dc83
-updated: 2018-03-17T03:14:08.820511514+01:00
+updated: 2019-02-04T16:57:53.586982387+01:00
 imports:
 - name: github.com/go-redis/redis
-  version: 877867d2845fbaf86798befe410b6ceb6f5c29a3
+  version: 22be8a3eaf992c828cecb69dc07348313bf08d2e
   subpackages:
   - internal
   - internal/consistenthash
   - internal/hashtag
   - internal/pool
   - internal/proto
-  - internal/singleflight
   - internal/util
 - name: github.com/lib/pq
   version: 88edab0803230a3898347e77b474f8c1820a1f20
