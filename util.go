@@ -73,6 +73,15 @@ func returnJson(w http.ResponseWriter, data interface{}) error {
 	return nil
 }
 
+func returnError(w http.ResponseWriter, code int, message string) error {
+	w.WriteHeader(code)
+	if _, err := w.Write([]byte(message)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func formatTemplate(w http.ResponseWriter, templateName string, data interface{}) error {
 	pageTemplate, err := template.ParseFiles(
 		"templates/_base.html",
