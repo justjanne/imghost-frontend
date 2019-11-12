@@ -74,16 +74,16 @@ func pageImageDetail(ctx PageContext) http.Handler {
 				}
 				http.Redirect(w, r, "/me/images", http.StatusFound)
 				return
-			default:
-				if err = formatTemplate(w, "image_detail.html", ImageDetailData{
-					user,
-					info,
-					owner == user.Id,
-				}); err != nil {
-					panic(err)
-				}
-				return
 			}
+
+			if err = formatTemplate(w, "image_detail.html", ImageDetailData{
+				user,
+				info,
+				owner == user.Id,
+			}); err != nil {
+				panic(err)
+			}
+			return
 		}
 
 		w.WriteHeader(http.StatusNotFound)
