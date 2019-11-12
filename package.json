@@ -4,6 +4,6 @@
     "build": "npm run sass"
   },
   "devDependencies": {
-    "node-sass": "^4.10.0"
+    "node-sass": "^4.13.0"
   }
 }
